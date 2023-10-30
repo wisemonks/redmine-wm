@@ -40,8 +40,8 @@ class Leaderboard < ActiveRecord::Base
     headers = {
       'Authorization' => 'Bearer ' + BEARER
     }
-    time_entries = TimeEntry.where(admin: true, user_id: [1, 134, 151]).where("spent_on >= ?", 32.days.ago).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse
-    time_entries_32_offset = TimeEntry.where(admin: true, user_id: [1, 134, 151]).where("spent_on >= ? AND spent_on < ?", 64.days.ago, 32.days.ago).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
+    time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", 32.days.ago).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse
+    time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on < ?", 64.days.ago, 32.days.ago).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
 
     time_entries.each_with_index do |(user_id, spent_hours), index|
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
