@@ -2,7 +2,7 @@
 lock "~> 3.17.0"
 
 set :application, "redmine-wisemonks"
-set :repo_url, "git@github.com:wisemonks/redmine.git"
+set :repo_url, "git@github.com:wisemonks/redmine-wm.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
