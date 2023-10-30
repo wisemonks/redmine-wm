@@ -89,7 +89,13 @@ end
 
 group :development do
   gem 'listen', '~> 3.3'
-  gem "yard"
+  gem 'yard'
+  gem 'capistrano'
+  gem 'capistrano3-puma'
+  gem 'capistrano-bundler'
+  gem 'capistrano-rbenv'
+  gem 'ed25519'
+  gem 'bcrypt_pbkdf'
 end
 
 group :test do
@@ -98,7 +104,7 @@ group :test do
   gem 'simplecov', '~> 0.22.0', :require => false
   gem "ffi", platforms: [:mingw, :x64_mingw, :mswin]
   # For running system tests
-  gem 'puma'
+  # gem 'puma'
   gem "capybara", ">= 3.39"
   if Gem.ruby_version < Gem::Version.new('3.0')
     gem "selenium-webdriver", "<= 4.9.0"
