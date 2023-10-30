@@ -316,6 +316,7 @@ DEPENDENCIES
   net-pop (~> 0.1.2)
   net-smtp (~> 0.3.3)
   nokogiri (~> 1.15.2)
+  puma
   rails (= 6.1.7.6)
   rails-dom-testing
   rbpdf (~> 1.21.3)

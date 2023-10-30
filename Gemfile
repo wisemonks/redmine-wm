@@ -55,6 +55,8 @@ group :common_mark do
   gem 'deckar01-task_list', '2.3.2'
 end
 
+gem 'puma'
+
 # Include database gems for the adapters found in the database
 # configuration file
 require 'erb'
