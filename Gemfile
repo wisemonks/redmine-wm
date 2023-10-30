@@ -56,6 +56,7 @@ group :common_mark do
 end
 
 gem 'puma'
+gem 'listen', '~> 3.3'
 
 # Include database gems for the adapters found in the database
 # configuration file
@@ -90,7 +91,6 @@ else
 end
 
 group :development do
-  gem 'listen', '~> 3.3'
   gem 'yard'
   gem 'capistrano'
   gem 'capistrano3-puma'
