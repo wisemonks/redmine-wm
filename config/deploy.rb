@@ -21,7 +21,8 @@ set :deploy_to, '/home/redmine'
 # set :pty, true
 
 # Default value for :linked_files is []
-append :linked_files, "config/database.yml", "config/credentials.yml.enc", "config/master.key"
+# append :linked_files, "config/database.yml", "config/credentials.yml.enc", "config/master.key"
+append :linked_files, "config/database.yml", "config/configuration.yml", "config/credentials.yml.enc", "config/master.key"
 
 # Default value for linked_dirs is []
 append :linked_dirs, "log", "files", "tmp/pids", "tmp/cache", "tmp/sockets", "tmp/webpacker", "public/system", "vendor"
