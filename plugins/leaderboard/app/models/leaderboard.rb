@@ -2,9 +2,9 @@ class Leaderboard < ActiveRecord::Base
   # This model is used to calculate every user's spent time over the last 32 days.
   # Then, each user receives a message containing their spent time, comparison with the previous 64 days, and their rank.
   MATTERMOST_USERS = {
-    '1': '8bobf9fiqbryfrkr6ciz3rm5ww', # Arturas
+    # '1': '8bobf9fiqbryfrkr6ciz3rm5ww', # Arturas
     '134': '4qa8z84metdo5gozjwbjr5geho', # Rytis
-    '151': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
+    # '151': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
   }
   BEARER = ENV['MATTERMOST_BEARER']
 
@@ -13,12 +13,12 @@ class Leaderboard < ActiveRecord::Base
     headers = {
       'Authorization' => 'Bearer ' + BEARER
     }
-    time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse
-    time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on < ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
+    time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
+    time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on <= ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
 
     table_markup = "|Ranking|Monk|This month|Last month|Change|
     |---|---|---|---|---|"
-    (time_entries.presence || self.default_entries).each_with_index do |(user_id, spent_hours), index|
+    time_entries.merge(self.default_entries).each_with_index do |(user_id, spent_hours), index|
       user = User.find(user_id)
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
       difference = spent_hours - spent_hours_32_offset
@@ -40,10 +40,10 @@ class Leaderboard < ActiveRecord::Base
     headers = {
       'Authorization' => 'Bearer ' + BEARER
     }
-    time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse
-    time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on < ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
+    time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
+    time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on <= ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
 
-    (time_entries.presence || self.default_entries).each_with_index do |(user_id, spent_hours), index|
+    time_entries.merge(self.default_entries).each_with_index do |(user_id, spent_hours), index|
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
       difference = spent_hours - spent_hours_32_offset
       mattermost_id = MATTERMOST_USERS[user_id.to_s.to_sym]
