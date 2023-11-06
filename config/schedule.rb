@@ -20,6 +20,7 @@
 # Learn more: http://github.com/javan/whenever
 
 every '0 9 * * 1-5', roles: [:whenever] do
-  runner "Leaderboard.calculate_leaderboard_for_admins"
-  runner "Leaderboard.calculate_leaderboard_for_each_user"
+  # runner "Leaderboard.calculate_leaderboard_for_admins"
+  # runner "Leaderboard.calculate_leaderboard_for_each_user"
+  rake "leaderboards:send_leaderboards"
 end
