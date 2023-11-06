@@ -2,9 +2,9 @@ class Leaderboard < ActiveRecord::Base
   # This model is used to calculate every user's spent time over the last 32 days.
   # Then, each user receives a message containing their spent time, comparison with the previous 64 days, and their rank.
   MATTERMOST_USERS = {
-    # '1': '8bobf9fiqbryfrkr6ciz3rm5ww', # Arturas
+    '1': '8bobf9fiqbryfrkr6ciz3rm5ww', # Arturas
     '134': '4qa8z84metdo5gozjwbjr5geho', # Rytis
-    # '151': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
+    '151': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
   }
   BEARER = ENV['MATTERMOST_BEARER']
 
