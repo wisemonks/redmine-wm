@@ -18,7 +18,7 @@ class Leaderboard < ActiveRecord::Base
 
     table_markup = "|Ranking|Monk|This month|Last month|Change|
     |---|---|---|---|---|"
-    time_entries.merge(self.default_entries).each_with_index do |(user_id, spent_hours), index|
+    self.default_entries.merge(time_entries).each_with_index do |(user_id, spent_hours), index|
       user = User.find(user_id)
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
       difference = spent_hours - spent_hours_32_offset
@@ -43,7 +43,7 @@ class Leaderboard < ActiveRecord::Base
     time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
     time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on <= ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
 
-    time_entries.merge(self.default_entries).each_with_index do |(user_id, spent_hours), index|
+    self.default_entries.merge(time_entries).each_with_index do |(user_id, spent_hours), index|
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
       difference = spent_hours - spent_hours_32_offset
       mattermost_id = MATTERMOST_USERS[user_id.to_s.to_sym]
