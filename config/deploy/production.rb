@@ -3,7 +3,7 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server '65.21.254.57', user: 'redmine', roles: %w{app db web}
+server '65.21.254.57', user: 'redmine', roles: %w{app db web whenever}
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 set :nginx_ssl_certificate, '/etc/ssl/certs/wisemonks.crt'
