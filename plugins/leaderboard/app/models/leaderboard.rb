@@ -6,7 +6,7 @@ class Leaderboard < ActiveRecord::Base
   }
   BEARER = ENV['MATTERMOST_BEARER']
 
-  def self.calculate_leaderboard_for_admins
+  def self.calculate_leaderboard
     mattermost_url = 'https://mattermost.wisemonks.com/api/v4/posts'
     headers = {
       'Authorization' => 'Bearer ' + BEARER
