@@ -12,8 +12,8 @@ class Leaderboard < ActiveRecord::Base
       'Authorization' => 'Bearer ' + BEARER
     }
     body = { 'channel_id' => MATTERMOST_USERS[:performance] }
-    table_markup = "|Ranking|Monk|This month|Last month|Change|
-    |---|---|---|---|---|"
+    table_markup = "|Ranking|Monk|This month|Last month|Change|Target|
+    |---|---|---|---|---|---|"
 
     time_entries = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ?", Date.today.beginning_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
     time_entries_32_offset = TimeEntry.joins(:user).where(user: { admin: true }).where("spent_on >= ? AND spent_on <= ?", Date.today.last_month.beginning_of_month, Date.today.last_month.end_of_month).group(:user_id).sum(:hours).sort_by { |user_id, spent_hours| spent_hours }.reverse.to_h
@@ -22,7 +22,7 @@ class Leaderboard < ActiveRecord::Base
       user = User.find(user_id)
       spent_hours_32_offset = time_entries_32_offset[user_id].to_f
       difference = spent_hours - spent_hours_32_offset
-      table_markup += "\n|##{index+1}|#{user.name}|#{spent_hours.round(2)}hrs|#{spent_hours_32_offset.round(2)}hrs|#{difference.round(2)}hrs|"
+      table_markup += "\n|##{index+1}|#{user.name}|#{spent_hours.round(2)}hrs|#{spent_hours_32_offset.round(2)}hrs|#{difference.round(2)}hrs|120hrs|"
     end
 
     body['message'] = mattermost_greet_message
