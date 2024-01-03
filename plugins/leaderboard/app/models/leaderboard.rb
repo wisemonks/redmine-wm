@@ -53,7 +53,6 @@ class Leaderboard < ActiveRecord::Base
   def self.default_entries
     {
       1 => 0, # Artūras
-      131 => 0, # Paulius
       134 => 0, # Rytis
       151 => 0, # Rokas
       152 => 0 # Gabrielius
