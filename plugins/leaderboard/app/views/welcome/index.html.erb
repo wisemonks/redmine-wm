@@ -29,18 +29,15 @@
       <th>Sold Time in Eur</th>
       <th>Profitability</th>
     </tr>
-    <% Project.joins(:sold_entries).all.order('sold_entries.hours desc').each do |project| %>
-      <% entries = project.time_entries.sum(:hours).round(2) %>
-      <% sales_hours = project.sold_entries.sum(:hours).round(2) %>
-      <% sales_eur = project.sold_entries.sum(:amount).round(2) %>
+    <% Project.joins(:sold_entries).select('projects.*, SUM(sold_entries.hours) as sold_hours, SUM(sold_entries.amount) as sold_amount').group('projects.id').order('sold_hours desc').each do |project| %>
       <tr>
         <td><%= link_to project.name, project_path(project) %></td>
-        <td><%= entries %> h</td>
-        <td><%= sales_hours %> h</td>
-        <td><%= sales_eur %> EUR</td>
+        <td><%= project.time_entries.sum(:hours).round(2) %> h</td>
+        <td><%= project.sold_hours.round(2) %> h</td>
+        <td><%= project.sold_amount.round(2) %> EUR</td>
         <td>
-          <% if sales_hours.positive? %>
-            <% ratio = (sales_hours / entries).round(2) %>
+          <% if project.sold_hours.positive? %>
+            <% ratio = (project.sold_hours / project.time_entries.sum(:hours)).round(2) %>
             <% if ratio >= 0.6 %>
               <span style="color: green;">x<%= ratio %></span>
             <% else %>

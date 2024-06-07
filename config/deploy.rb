@@ -40,10 +40,7 @@ append :linked_dirs, "log", "files", "tmp/pids", "tmp/cache", "tmp/sockets", "tm
 # set :ssh_options, verify_host_key: :secure
 set :whenever_roles, "whenever"
 
-
-
 namespace :deploy do
-
   # Declares a task to be executed once the new code is on the server.
   after :updated, :plugin_assets do
     on roles(:app) do
@@ -57,15 +54,6 @@ namespace :deploy do
       end
     end
   end
-
-  # # This will run after the deployment finished and is used to reload
-  # # the application. You most probably have to change that depending on
-  # # your server setup.
-  # after :published, :restart do
-  #   on roles(:app) do
-  #     sudo "/etc/init.d/unicorn reload redmine"
-  #   end
-  # end
 
   # cleans up old versions on the server (keeping the number of releases
   # configured above)
