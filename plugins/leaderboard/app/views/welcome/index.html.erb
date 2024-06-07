@@ -37,7 +37,7 @@
         <td><%= project.sold_amount.round(2) %> EUR</td>
         <td>
           <% if project.sold_hours.positive? %>
-            <% ratio = (project.sold_hours / project.time_entries.sum(:hours)).round(2) %>
+            <% ratio = (project.sold_hours / project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours)).round(2) %>
             <% if ratio >= 0.6 %>
               <span style="color: green;">x<%= ratio %></span>
             <% else %>
