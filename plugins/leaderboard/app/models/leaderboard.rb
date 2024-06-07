@@ -48,7 +48,7 @@ class Leaderboard < ActiveRecord::Base
 
       sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
       sold_entry.amount = total_sales
-      sold_entry.hours = (total_sales - vat_sum) / project.tariff
+      sold_entry.hours = total_sales / project.tariff
       sold_entry.vat_amount = vat_sum
       sold_entry.tariff = project.tariff
       sold_entry.save
