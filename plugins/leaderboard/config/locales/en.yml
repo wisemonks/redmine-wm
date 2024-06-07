@@ -1,3 +1,4 @@
-# English strings go here for Rails i18n
 en:
-  # my_label: "My label"
+  label_sold_hours: Sold hours
+  label_sold_hours_in_eur: Sold hours in EUR
+  label_profitability_ratio: Profitability ratio

@@ -35,6 +35,63 @@ class Leaderboard < ActiveRecord::Base
     response = HTTParty.post(mattermost_url, :headers => headers, :body => body.to_json)
   end
 
+  def self.calculate_project_profitability(from = Date.today.last_month.beginning_of_month, to = Date.today.last_month.end_of_month)
+    projects = Project.where.not(client_code: nil)
+
+    projects.each do |project|
+      sales = fetch_project_sales(project.client_code, from, to)
+      next if sales.dig('data').nil?
+
+      total_sales = sales['data'].sum{ |a| a['sumWithVatInEuro'] }
+      vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }
+      total_hours = project.time_entries.sum(:hours)
+
+      sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
+      sold_entry.amount = total_sales
+      sold_entry.hours = (total_sales - vat_sum) / project.tariff
+      sold_entry.vat_amount = vat_sum
+      sold_entry.tariff = project.tariff
+      sold_entry.save
+    end
+  end
+
+  def self.fetch_project_sales(client_code, from, to)
+    params = {
+      'rows' => 500,
+      'page' => 1,
+      'sidx' => 'series',
+      'sord' => 'asc',
+      'filters' => {
+        'groupOp' => 'AND',
+        'rules' => [
+          {
+            'field' => 'series',
+            'op' => 'eq',
+            'data' => 'WM'
+          },
+          {
+            'field' => 'clientCode',
+            'op' => 'eq',
+            'data' => client_code
+          },
+          {
+            'field' => 'saleDate',
+            'op' => 'ge',
+            'data' => from.strftime('%Y-%m-%d')
+          },
+          {
+            'field' => 'saleDate',
+            'op' => 'le',
+            'data' => to.strftime('%Y-%m-%d')
+          }
+        ]
+      }
+    }
+    B1::B1.new.request('warehouse/sales/list', params)
+  rescue StandardError => e
+    Rails.logger.error "Failed to fetch sales from B1: #{e.message}"
+  end
+
   def self.mattermost_greet_message
     "Beep boop! This is your spent time report for the last two months:"
   end
@@ -43,19 +100,14 @@ class Leaderboard < ActiveRecord::Base
     "Keep up the good work! :muscle:"
   end
 
-  def self.mattermost_leaderboard(spent_hours, spent_hours_32_offset, difference, rank)
-    " |Ranking|This month|Last month|Change|
-      |---|---|---|---|
-      |##{rank}|#{spent_hours.round(2)}hrs|#{spent_hours_32_offset.round(2)}hrs|#{difference.round(2)}hrs|
-    "
-  end
-
   def self.default_entries
     {
       1 => 0, # Artūras
       134 => 0, # Rytis
       151 => 0, # Rokas
-      152 => 0 # Gabrielius
+      152 => 0, # Gabrielius,
+      156 => 0, # Raminta
+      161 => 0 # Monika
     }
   end
 end

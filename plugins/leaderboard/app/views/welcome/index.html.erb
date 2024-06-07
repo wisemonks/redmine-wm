@@ -1,0 +1,61 @@
+<h2><%= l(:label_home) %></h2>
+
+<div class="splitcontent">
+<div class="splitcontentleft">
+  <div class="wiki">
+    <%= textilizable Setting.welcome_text %>
+  </div>
+  <%= call_hook(:view_welcome_index_left) %>
+</div>
+
+<div class="splitcontentright">
+  <% if @news.any? %>
+  <div class="news box">
+  <h3><%=l(:label_news_latest)%></h3>
+    <%= render :partial => 'news/news', :collection => @news %>
+    <%= link_to l(:label_news_view_all), :controller => 'news' %>
+  </div>
+  <% end %>
+  <%= call_hook(:view_welcome_index_right) %>
+</div>
+</div>
+
+<% if User.current.admin? %>
+  <table class="list">
+    <tr>
+      <th>Project</th>
+      <th>Spent Time</th>
+      <th>Sold Time</th>
+      <th>Sold Time in Eur</th>
+      <th>Profitability</th>
+    </tr>
+    <% Project.joins(:sold_entries).all.order('sold_entries.hours desc').each do |project| %>
+      <% entries = project.time_entries.sum(:hours).round(2) %>
+      <% sales_hours = project.sold_entries.sum(:hours).round(2) %>
+      <% sales_eur = project.sold_entries.sum(:amount).round(2) %>
+      <tr>
+        <td><%= link_to project.name, project_path(project) %></td>
+        <td><%= entries %> h</td>
+        <td><%= sales_hours %> h</td>
+        <td><%= sales_eur %> EUR</td>
+        <td>
+          <% if sales_hours.positive? %>
+            <% ratio = (sales_hours / entries).round(2) %>
+            <% if ratio >= 0.6 %>
+              <span style="color: green;">x<%= ratio %></span>
+            <% else %>
+              <span style="color: red;">x<%= ratio %></span>
+            <% end %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% end %>
+
+<% content_for :header_tags do %>
+<%= auto_discovery_link_tag(:atom, {:controller => 'news', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
+                                   :title => "#{Setting.app_title}: #{l(:label_news_latest)}") %>
+<%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
+                                   :title => "#{Setting.app_title}: #{l(:label_activity)}") %>
+<% end %>

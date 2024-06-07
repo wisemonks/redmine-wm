@@ -98,6 +98,7 @@ group :development do
   gem 'capistrano-rbenv'
   gem 'ed25519'
   gem 'bcrypt_pbkdf'
+  gem 'pry'
 end
 
 group :test do
