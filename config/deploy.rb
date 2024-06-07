@@ -39,3 +39,35 @@ append :linked_dirs, "log", "files", "tmp/pids", "tmp/cache", "tmp/sockets", "tm
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 set :whenever_roles, "whenever"
+
+
+
+namespace :deploy do
+
+  # Declares a task to be executed once the new code is on the server.
+  after :updated, :plugin_assets do
+    on roles(:app) do
+      within release_path do
+        with rails_env: fetch(:rails_env) do
+          # Copy over plugin assets
+          execute :rake, 'redmine:plugins:assets'
+          # Run plugin migrations
+          execute :rake, 'redmine:plugins:migrate'
+        end
+      end
+    end
+  end
+
+  # # This will run after the deployment finished and is used to reload
+  # # the application. You most probably have to change that depending on
+  # # your server setup.
+  # after :published, :restart do
+  #   on roles(:app) do
+  #     sudo "/etc/init.d/unicorn reload redmine"
+  #   end
+  # end
+
+  # cleans up old versions on the server (keeping the number of releases
+  # configured above)
+  after :finished, 'deploy:cleanup'
+end
