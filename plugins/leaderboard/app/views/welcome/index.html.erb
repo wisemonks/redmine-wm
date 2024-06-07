@@ -32,7 +32,7 @@
     <% Project.joins(:sold_entries).select('projects.*, SUM(sold_entries.hours) as sold_hours, SUM(sold_entries.amount) as sold_amount').group('projects.id').order('sold_hours desc').each do |project| %>
       <tr>
         <td><%= link_to project.name, project_path(project) %></td>
-        <td><%= project.time_entries.sum(:hours).round(2) %> h</td>
+        <td><%= project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours).round(2) %> h</td>
         <td><%= project.sold_hours.round(2) %> h</td>
         <td><%= project.sold_amount.round(2) %> EUR</td>
         <td>
