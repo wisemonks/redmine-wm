@@ -44,7 +44,6 @@ class Leaderboard < ActiveRecord::Base
 
       total_sales = sales['data'].sum{ |a| a['sumWithVatInEuro'] }
       vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }
-      total_hours = project.time_entries.sum(:hours)
 
       sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
       sold_entry.amount = total_sales

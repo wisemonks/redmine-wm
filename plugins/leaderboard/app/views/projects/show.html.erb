@@ -110,11 +110,11 @@
       <% if @sold_hours.present? %>
           <li><%= l(:label_sold_hours) %>: <%= l_hours(@sold_hours) %>
           <li><%= l(:label_sold_hours_in_eur) %>: <%= @sold_hours_in_euros.round(2) %> EUR
-          <li><%= l(:label_profitability_ratio) %>:
-          <% if @profitability_ratio > 1 %>
-            <span style="color: green;"><%= @profitability_ratio.round(2) %></span>
+          <li><%= l(:label_difference_ratio) %>:
+          <% if @difference_ratio > 1 %>
+            <span style="color: green;"><%= @difference_ratio.round(2) %></span>
           <% else %>
-            <span style="color: red;"><%= @profitability_ratio.round(2) %></span>
+            <span style="color: red;"><%= @difference_ratio.round(2) %></span>
           <% end %>
       <% end %>
     </ul>

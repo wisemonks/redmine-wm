@@ -192,7 +192,7 @@ class ProjectsController < ApplicationController
           @total_estimated_hours = Issue.visible.where(cond).sum(:estimated_hours).to_f
           @sold_hours = @project.sold_entries.sum(:hours)
           @sold_hours_in_euros = @project.sold_entries.sum(:amount)
-          @profitability_ratio = @sold_hours / @total_hours if @total_hours > 0
+          @difference_ratio = @sold_hours / @total_hours if @total_hours > 0
         end
 
         @key = User.current.atom_key

@@ -27,7 +27,7 @@
       <th>Spent Time</th>
       <th>Sold Time</th>
       <th>Sold Time in Eur</th>
-      <th>Profitability</th>
+      <th>Difference ratio</th>
     </tr>
     <% Project.joins(:sold_entries).select('projects.*, SUM(sold_entries.hours) as sold_hours, SUM(sold_entries.amount) as sold_amount').group('projects.id').order('sold_hours desc').each do |project| %>
       <tr>
@@ -36,13 +36,15 @@
         <td><%= project.sold_hours.round(2) %> h</td>
         <td><%= project.sold_amount.round(2) %> EUR</td>
         <td>
-          <% if project.sold_hours.positive? %>
+          <% if project.sold_hours.positive? && project.time_entries.positive? %>
             <% ratio = (project.sold_hours / project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours)).round(2) %>
             <% if ratio >= 0.6 %>
               <span style="color: green;">x<%= ratio %></span>
             <% else %>
               <span style="color: red;">x<%= ratio %></span>
             <% end %>
+          <% else %>
+            <span style="color: red;">x0</span>
           <% end %>
         </td>
       </tr>
