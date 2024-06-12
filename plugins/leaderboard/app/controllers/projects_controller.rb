@@ -190,9 +190,9 @@ class ProjectsController < ApplicationController
         if User.current.allowed_to_view_all_time_entries?(@project)
           @total_hours = TimeEntry.visible.where(cond).sum(:hours).to_f
           @total_estimated_hours = Issue.visible.where(cond).sum(:estimated_hours).to_f
-          @sold_hours = @project.sold_entries.sum(:hours)
-          @sold_hours_in_euros = @project.sold_entries.sum(:amount)
-          @difference_ratio = @sold_hours / @total_hours if @total_hours > 0
+          @sold_hours = @project.sold_entries.sum(:hours).to_f
+          @sold_hours_in_euros = @project.sold_entries.sum(:amount).to_f
+          @difference_ratio = (@total_hours.zero? || @sold_hours.zero?) ? 0 : @sold_hours / @total_hours
         end
 
         @key = User.current.atom_key

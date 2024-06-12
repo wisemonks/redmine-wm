@@ -97,7 +97,7 @@
   </div>
   <% end %>
 
-  <% if User.current.allowed_to?(:view_time_entries, @project) %>
+  <% if User.current.allowed_to?(:view_time_entries, @project) && User.current.admin? %>
   <div class="spent_time box">
     <h3 class="icon icon-time"><%= l(:label_time_tracking) %></h3>
     <ul>
