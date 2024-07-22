@@ -29,15 +29,26 @@
       <th>Sold Time in Eur</th>
       <th>Difference ratio</th>
     </tr>
+    <% total_entries = 0 %>
+    <% total_sold_hours = 0 %>
+    <% total_sold_amount = 0 %>
     <% Project.joins(:sold_entries).select('projects.*, SUM(sold_entries.hours) as sold_hours, SUM(sold_entries.amount) as sold_amount').group('projects.id').order('sold_hours desc').each do |project| %>
       <tr>
+        <% time_entries = project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours).round(2) %>
+        <% sold_hours = project.sold_hours.round(2) %>
+        <% sold_amount = project.sold_amount.round(2) %>
+        <% total_entries += time_entries %>
+        <% total_sold_hours += sold_hours %>
+        <% total_sold_amount += sold_amount %>
+
         <td><%= link_to project.name, project_path(project) %></td>
-        <td><%= project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours).round(2) %> h</td>
-        <td><%= project.sold_hours.round(2) %> h</td>
-        <td><%= project.sold_amount.round(2) %> EUR</td>
+        <td><%= time_entries %> h</td>
+        <td><%= sold_hours %> h</td>
+        <td><%= sold_amount %> EUR</td>
+
         <td>
-          <% if project.sold_hours.positive? && project.time_entries.size.positive? %>
-            <% ratio = (project.sold_hours / project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours)).round(2) %>
+          <% if sold_hours.positive? && time_entries.positive? %>
+            <% ratio = (sold_hours / time_entries) %>
             <% if ratio.try(:finite?) %>
               <% if ratio >= 0.6 && ratio <= 2 %>
                 <span style="color: green;">x<%= ratio %></span>
@@ -53,6 +64,13 @@
         </td>
       </tr>
     <% end %>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td><strong><%= total_entries %> h</strong></td>
+      <td><strong><%= total_sold_hours %> h</strong></td>
+      <td><strong><%= total_sold_amount %> EUR</strong></td>
+      <td></td>
+    </tr>
   </table>
 <% end %>
 
