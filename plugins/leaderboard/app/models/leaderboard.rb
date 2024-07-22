@@ -43,6 +43,8 @@ class Leaderboard < ActiveRecord::Base
       next if sales.dig('data').nil?
 
       total_sales = sales['data'].sum{ |a| a['sumWithVatInEuro'] }
+      next if total_sales.zero?
+      
       vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }
 
       sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
