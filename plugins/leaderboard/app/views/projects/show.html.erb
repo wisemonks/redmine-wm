@@ -111,7 +111,7 @@
           <li><%= l(:label_sold_hours) %>: <%= l_hours(@sold_hours) %>
           <li><%= l(:label_sold_hours_in_eur) %>: <%= @sold_hours_in_euros.round(2) %> EUR
           <li><%= l(:label_difference_ratio) %>:
-          <% if @difference_ratio > 1 %>
+          <% if @difference_ratio >= 0.6 && @difference_ratio < 2 %>
             <span style="color: green;"><%= @difference_ratio.round(2) %></span>
           <% else %>
             <span style="color: red;"><%= @difference_ratio.round(2) %></span>

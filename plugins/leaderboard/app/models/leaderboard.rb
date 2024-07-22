@@ -36,7 +36,7 @@ class Leaderboard < ActiveRecord::Base
   end
 
   def self.calculate_project_profitability(from = Date.today.last_month.beginning_of_month, to = Date.today.last_month.end_of_month)
-    projects = Project.where.not(client_code: nil)
+    projects = Project.where.not(client_code: ['', nil], tariff: ['', nil])
 
     projects.each do |project|
       sales = fetch_project_sales(project.client_code, from, to)
