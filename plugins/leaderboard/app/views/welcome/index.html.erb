@@ -48,7 +48,7 @@
 
         <td>
           <% if sold_hours.positive? && time_entries.positive? %>
-            <% ratio = (sold_hours / time_entries) %>
+            <% ratio = (sold_hours / time_entries).round(2) %>
             <% if ratio.try(:finite?) %>
               <% if ratio >= 0.6 && ratio <= 2 %>
                 <span style="color: green;">x<%= ratio %></span>
@@ -66,9 +66,9 @@
     <% end %>
     <tr>
       <td><strong>Total</strong></td>
-      <td><strong><%= total_entries %> h</strong></td>
-      <td><strong><%= total_sold_hours %> h</strong></td>
-      <td><strong><%= total_sold_amount %> EUR</strong></td>
+      <td><strong><%= total_entries.round(2) %> h</strong></td>
+      <td><strong><%= total_sold_hours.round(2) %> h</strong></td>
+      <td><strong><%= total_sold_amount.round(2) %> EUR</strong></td>
       <td></td>
     </tr>
   </table>
