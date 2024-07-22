@@ -42,10 +42,11 @@ class Leaderboard < ActiveRecord::Base
       sales = fetch_project_sales(project.client_code, from, to)
       next if sales.dig('data').nil?
 
-      total_sales = sales['data'].sum{ |a| a['sumWithVatInEuro'] }
+      total_sales = sales['data'].sum{ |a| a['sumWithVatInEuro'] }.to_f
       next if total_sales.zero?
       
-      vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }
+      vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }.to_f
+      next if vat_sum.zero?
 
       sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
       sold_entry.amount = total_sales.to_f
