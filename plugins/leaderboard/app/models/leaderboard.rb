@@ -46,10 +46,10 @@ class Leaderboard < ActiveRecord::Base
       vat_sum = sales['data'].sum{ |a| a['vatInEuro'] }
 
       sold_entry = SoldEntry.find_or_initialize_by(project: project, from: from, to: to)
-      sold_entry.amount = total_sales
-      sold_entry.hours = total_sales / project.tariff
-      sold_entry.vat_amount = vat_sum
-      sold_entry.tariff = project.tariff
+      sold_entry.amount = total_sales.to_f
+      sold_entry.hours = total_sales.to_f / project.tariff.to_f
+      sold_entry.vat_amount = vat_sum.to_f
+      sold_entry.tariff = project.tariff.to_f
       sold_entry.save
     end
   end
