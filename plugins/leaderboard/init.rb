@@ -6,3 +6,7 @@ Redmine::Plugin.register :leaderboard do
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 end
+
+Proc.new do
+  Redmine::Helpers::Calendar.send(:include, CalendarPatch)
+end.call

@@ -21,6 +21,7 @@
 </div>
 
 <% if User.current.admin? %>
+  <h3>Time entries</h3>
   <table class="list">
     <tr>
       <th>Project</th>
@@ -72,11 +73,21 @@
       <td></td>
     </tr>
   </table>
+
+  <%-
+      year ||= User.current.today.year
+      month ||= User.current.today.month
+      calendar = Redmine::Helpers::Calendar.new(Date.civil(year, month, 1), current_language, :month)
+      calendar.events= Issue.assigned_to(User.admin.status(1))
+  %>
+  <h3>Issues</h3>
+  <%= render :partial => 'common/calendar', :locals => { :calendar => calendar } %>
+
 <% end %>
 
 <% content_for :header_tags do %>
-<%= auto_discovery_link_tag(:atom, {:controller => 'news', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
-                                   :title => "#{Setting.app_title}: #{l(:label_news_latest)}") %>
-<%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
-                                   :title => "#{Setting.app_title}: #{l(:label_activity)}") %>
+  <%= auto_discovery_link_tag(:atom, {:controller => 'news', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
+                                    :title => "#{Setting.app_title}: #{l(:label_news_latest)}") %>
+  <%= auto_discovery_link_tag(:atom, {:controller => 'activities', :action => 'index', :key => User.current.atom_key, :format => 'atom'},
+                                    :title => "#{Setting.app_title}: #{l(:label_activity)}") %>
 <% end %>
