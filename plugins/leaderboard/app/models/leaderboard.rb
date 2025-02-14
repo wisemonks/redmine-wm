@@ -1,17 +1,12 @@
 class Leaderboard < ActiveRecord::Base
   # This model is used to calculate every user's spent time over the last two months.
   # Then, 'Performance' channel receives a message containing their spent time, comparison with the previous month, and each users' rank.
-  MATTERMOST_USERS = {
-    'performance': 'soibe9qnefn53y4yu7tu8zg9ce', # Performance channel
-  }
-  BEARER = ENV['MATTERMOST_BEARER']
-
   def self.calculate_leaderboard
     mattermost_url = 'https://mattermost.wisemonks.com/api/v4/posts'
     headers = {
       'Authorization' => 'Bearer ' + BEARER
     }
-    body = { 'channel_id' => MATTERMOST_USERS[:performance] }
+    body = { 'channel_id' => MATTERMOST_CHANNELS[:performance] }
     table_markup = "|Ranking|Monk|This month|Last month|Change|Target|
     |---|---|---|---|---|---|"
 

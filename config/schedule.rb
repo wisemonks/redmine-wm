@@ -16,3 +16,9 @@ job_type :script, %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment 
 every '0 9 * * 1', roles: [:whenever] do
   rails "leaderboards:send_leaderboards"
 end
+
+every.minute.do {
+  runner "task_pool:notify"
+  runner "task_pool:check_status"
+  runner "task_pool:notify_spent_time"
+}
