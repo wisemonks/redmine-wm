@@ -13,6 +13,8 @@ job_type :rails,  %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment 
 job_type :runner, %q{ cd :path && PATH=:env_path:"$PATH" bin/rails runner -e :environment ':task' :output }
 job_type :script, %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment bundle exec bin/:task :output }
 
-repeat :weekly, 'monday', roles: [:whenever] do
+every 1.week, roles: [:whenever] do
   rails "leaderboards:send_leaderboards"
 end
+
+# Every 2 weeks
