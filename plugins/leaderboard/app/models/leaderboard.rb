@@ -3,6 +3,7 @@ class Leaderboard < ActiveRecord::Base
   # Then, 'Performance' channel receives a message containing their spent time, comparison with the previous month, and each users' rank.
   MATTERMOST_USERS = {
     'performance': 'soibe9qnefn53y4yu7tu8zg9ce', # Performance channel
+    'digest': 'z4nsrwfuujbaxned3t6hdczzhe', # AI digest channel
   }
   BEARER = ENV['MATTERMOST_BEARER']
 
@@ -11,7 +12,7 @@ class Leaderboard < ActiveRecord::Base
     headers = {
       'Authorization' => 'Bearer ' + BEARER
     }
-    body = { 'channel_id' => MATTERMOST_USERS[:performance] }
+    body = { 'channel_id' => MATTERMOST_USERS[:digest] }
     table_markup = "|Ranking|Monk|This month|Last month|Change|Target|
     |---|---|---|---|---|---|"
 

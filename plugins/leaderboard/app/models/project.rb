@@ -119,6 +119,13 @@ class Project < ActiveRecord::Base
   scope :having_trackers, (lambda do
     where("#{Project.table_name}.id IN (SELECT DISTINCT project_id FROM #{table_name_prefix}projects_trackers#{table_name_suffix})")
   end)
+  scope :leaderboard, lambda {
+    joins(:sold_entries)
+    .where("sold_entries.from >= ? AND sold_entries.to <= ?", Date.current.beginning_of_year, Date.current.end_of_year)
+    .select('projects.*, SUM(sold_entries.hours) as sold_hours, SUM(sold_entries.amount) as sold_amount')
+    .group('projects.id')
+    .order('sold_hours desc')
+  }
 
   def initialize(attributes=nil, *args)
     super

@@ -1,0 +1,55 @@
+<h3>Time entries</h3>
+<table class="list">
+  <tr>
+    <th>Project</th>
+    <th>Spent Time</th>
+    <th>Sold Time</th>
+    <th>Sold Time in Eur</th>
+    <th>Difference ratio</th>
+  </tr>
+  <% total_entries = 0 %>
+  <% total_sold_hours = 0 %>
+  <% total_sold_amount = 0 %>
+  <% Project.leaderboard.each do |project| %>
+    <tr>
+      <% time_entries = project.time_entries.in_range(Date.today.beginning_of_year, Date.today.end_of_year).sum(:hours).round(2) %>
+      <% sold_hours = project.sold_hours.round(2) %>
+      <% sold_amount = project.sold_amount.round(2) %>
+      <% total_entries += time_entries %>
+      <% total_sold_hours += sold_hours %>
+      <% total_sold_amount += sold_amount %>
+
+      <td><%= link_to project.name, project_path(project) %></td>
+      <td><%= time_entries %> h</td>
+      <td><%= sold_hours %> h</td>
+      <td><%= sold_amount %> EUR</td>
+
+      <td>
+        <% if sold_hours.positive? && time_entries.positive? %>
+          <% ratio = (sold_hours / time_entries).round(2) %>
+          <% if ratio.try(:finite?) %>
+            <% if ratio >= 0.6 && ratio <= 2 %>
+              <span style="color: green;">x<%= ratio %></span>
+            <% else %>
+              <span style="color: red;">x<%= ratio %></span>
+            <% end %>
+          <% else %>
+            <span style="color: red;">x0</span>
+          <% end %>
+        <% else %>
+          <span style="color: red;">x0</span>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+    <td><strong>Total</strong></td>
+    <td><strong><%= total_entries.round(2) %> h</strong></td>
+    <td><strong><%= total_sold_hours.round(2) %> h</strong></td>
+    <td><strong><%= total_sold_amount.round(2) %> EUR</strong></td>
+    <td></td>
+  </tr>
+</table>
+
+<%# <h3>Issues</h3> %>
+<%# render :partial => 'common/calendar', :locals => { :calendar => calendar } %>
