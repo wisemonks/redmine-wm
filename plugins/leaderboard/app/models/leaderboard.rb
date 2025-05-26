@@ -107,9 +107,12 @@ class Leaderboard < ActiveRecord::Base
       1 => 0, # Artūras
       134 => 0, # Rytis
       151 => 0, # Rokas
-      152 => 0, # Gabrielius,
       156 => 0, # Raminta
       161 => 0 # Monika
+      169 => 0 # Agneta
+      172 => 0 # Edvinas
+      178 => 0 # Adomas
+      179 => 0 # Viktorija
     }
   end
 end
