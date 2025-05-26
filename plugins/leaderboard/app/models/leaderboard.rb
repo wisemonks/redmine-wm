@@ -108,10 +108,10 @@ class Leaderboard < ActiveRecord::Base
       134 => 0, # Rytis
       151 => 0, # Rokas
       156 => 0, # Raminta
-      161 => 0 # Monika
-      169 => 0 # Agneta
-      172 => 0 # Edvinas
-      178 => 0 # Adomas
+      161 => 0, # Monika
+      169 => 0, # Agneta
+      172 => 0, # Edvinas
+      178 => 0, # Adomas
       179 => 0 # Viktorija
     }
   end
