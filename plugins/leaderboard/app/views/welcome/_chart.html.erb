@@ -1,5 +1,5 @@
-<%- prev_year_profitability = SoldEntry.for_year(Date.current.prev_year.year).sum(:amount) %>
-<%- current_year_profitability = SoldEntry.for_year(Date.current.year).sum(:amount) %>
+<%- prev_year_profitability = SoldEntry.for_year(Date.current.prev_year.year).sum(:amount).round(2) %>
+<%- current_year_profitability = SoldEntry.for_year(Date.current.year).sum(:amount).round(2) %>
 
 <h3>Yearly income</h3>
 
