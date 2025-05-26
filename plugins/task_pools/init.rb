@@ -6,3 +6,8 @@ Redmine::Plugin.register :task_pools do
   url 'http://example.com/path/to/plugin'
   author_url 'http://example.com/about'
 end
+
+Proc.new do
+  User.send(:include, TaskPoolsUserPatch)
+  Issue.send(:include, TaskPoolsIssuePatch)
+end.call

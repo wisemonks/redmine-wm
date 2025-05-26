@@ -1,11 +1,11 @@
 module Mattermost
-  class MattermostSDK
+  class MattermostSdk
     include HTTParty
     base_uri 'https://mattermost.wisemonks.com/api/v4'
 
-    def initialize(bearer_token)
+    def initialize(bearer)
       @headers = {
-        'Authorization' => "Bearer #{bearer_token}",
+        'Authorization' => "Bearer #{bearer}",
         'Content-Type' => 'application/json'
       }
     end
@@ -31,6 +31,20 @@ module Mattermost
       )
     end
 
+    def pin_post(post_id)
+      self.class.put(
+        "/posts/#{post_id}/pin",
+        headers: @headers
+      )
+    end
+
+    def unpin_post(post_id)
+      self.class.delete(
+        "/posts/#{post_id}/pin",
+        headers: @headers
+      )
+    end
+
     def get_reactions(post_id)
       response = get_post(post_id)
       response.dig('metadata', 'reactions') || []
@@ -43,6 +57,13 @@ module Mattermost
       message += "Estimate: #{issue.estimated_hours}\n\n"
       message += issue.description.to_s
       message
+    end
+
+    def channels
+      {
+        'performance': 'soibe9qnefn53y4yu7tu8zg9ce', # Performance channel
+        'pool': 'by3xzd35ejgp5fyobibrd8agwo' # 'zqatx33fdbb5mgfhfwh5zxkbxo' # Task pool channel
+      }
     end
   end
 end

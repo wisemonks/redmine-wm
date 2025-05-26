@@ -10,6 +10,8 @@ class AddMattermostMessageIdToIssues < ActiveRecord::Migration[6.1]
       t.string :mattermost_id
     end
 
+    add_column :issues, :task_pool, :boolean, null: false, default: false
+
     add_reference :users, :mattermost_user, null: true, foreign_key: true
     add_reference :issues, :mattermost_message, null: true, foreign_key: true
   end

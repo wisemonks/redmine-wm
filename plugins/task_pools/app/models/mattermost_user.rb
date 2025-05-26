@@ -1,3 +1,3 @@
-class MattermostUser < ApplicationRecord
-  belongs_to :user
+class MattermostUser < ActiveRecord::Base
+  has_one :user
 end

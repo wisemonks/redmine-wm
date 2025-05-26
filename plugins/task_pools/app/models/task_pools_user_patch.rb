@@ -18,7 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 # Simple class to compute the start and end dates of a calendar
-module TaskPoolsIssuePatch
+module TaskPoolsUserPatch
   def self.included(base)
     base.class_eval do
       belongs_to :mattermost_user, class_name: 'MattermostUser', optional: true

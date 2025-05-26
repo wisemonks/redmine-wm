@@ -23,8 +23,8 @@ module TaskPoolsIssuePatch
     base.class_eval do
       belongs_to :mattermost_message, class_name: 'MattermostMessage', optional: true
 
-      def assign_mattermost_user(message)
-        issue_url = "[##{issue.id} [#{issue.tracker.name}] #{issue.subject}](https://redmine.wisemonks.com/issues/#{issue.id})"
+      def assign_mattermost_user(mattermost, message)
+        issue_url = "[##{id} [#{tracker.name}] #{subject}](https://redmine.wisemonks.com/issues/#{id})"
         reactions = mattermost.get_reactions(message['id'])
         reactions_by_user = reactions.group_by { |r| r['user_id'] }
         manager_user = User.find_by_mail('rytis@wisemonks.com')
@@ -36,20 +36,33 @@ module TaskPoolsIssuePatch
           next if user.nil?
 
           if user_reactions.any? { |r| r['emoji_name'] == 'ship' }
-            issue.update(assigned_to_id: manager_user.id, assigned_to_type: 'User', status_id: resolved_not_published_status.id)
-            message = "This issue has been shipped.\n\n** @#{user.mattermost_user.mattermost_name} Please log your SPENT TIME.**\n#{issue_url}"
-          elsif user_reactions.any? { |r| r['emoji_name'] == '+1' }
-            issue.update(assigned_to_id: user.id, assigned_to_type: 'User', status_id: in_progress_status.id)
-            Watcher.create(watchable: issue, user: user)
-            Watcher.create(watchable: issue, user_id: manager_user.id)
-            message = "This issue has been reassigned to @#{user.mattermost_user.mattermost_name}\n\n#{issue_url}"
-          end
+            current_status = IssueStatus.find_by_id(status_id)
 
-          Mattermost::MattermostSDK.new(BEARER).create_post(
-            MATTERMOST_CHANNELS[:pool],
-            message,
-            issue.mattermost_message.mattermost_id
-          ) if message
+            self.init_journal(user, '')
+            self.update(status_id: resolved_not_published_status.id, assigned_to_id: manager_user.id)
+
+            message = "#{issue_url}\n\nThis issue has been shipped.\n\n** @#{user.mattermost_user.mattermost_name} Please log your SPENT TIME.**"
+            mattermost.create_post(
+              mattermost.channels[:pool],
+              message,
+              mattermost_message.mattermost_id
+            )
+            next
+          elsif user_reactions.any? { |r| r['emoji_name'] == '+1' }
+            Watcher.find_or_create_by(watchable: self, user: user)
+            Watcher.find_or_create_by(watchable: self, user_id: manager_user.id) unless manager_user == user
+
+            self.init_journal(user, '')
+            self.update(status_id: in_progress_status.id, assigned_to_id: user.id)
+
+            message = "#{issue_url}\n\nThis issue has been reassigned to @#{user.mattermost_user.mattermost_name}"
+            mattermost.create_post(
+              mattermost.channels[:pool],
+              message,
+              mattermost_message.mattermost_id
+            )
+            next
+          end
         end
       end
     end
