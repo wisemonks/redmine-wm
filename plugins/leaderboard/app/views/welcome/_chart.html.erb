@@ -1,37 +1,77 @@
-<%- prev_year_profitability = SoldEntry.for_year(Date.current.prev_year.year).sum(:amount).round(2) %>
-<%- current_year_profitability = SoldEntry.for_year(Date.current.year).sum(:amount).round(2) %>
-
 <h3>Yearly income</h3>
 
-<canvas id="incomeChart" width="400" height="400"></canvas>
+<div class="chart-container" style="display: flex; flex-direction: row; width: 100%">
+  <canvas id="incomeChart" width="700" height="600"></canvas>
+  <canvas id="timeChart" width="700" height="600"></canvas>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-  let ctx = document.getElementById('incomeChart').getContext('2d');
-  let incomeChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-          labels: ['2024', '2025'],
-          datasets: [{
-              label: 'Income in EUR',
-              data: [<%= prev_year_profitability %>, <%= current_year_profitability %>],
-              backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-              ],
-              borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-              ],
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
+  // Income chart
+  let ctxIncome = document.getElementById('incomeChart').getContext('2d');
+  let incomeChart = new Chart(ctxIncome, {
+    type: 'bar',
+    data: {
+      // labels: ['2024', '2025'],
+      labels: <%= Date.parse('2024-01-01').year.upto(Date.current.year).to_json %>,
+      datasets: [{
+        label: 'Income (EUR)',
+        data: [<%= @prev_year_profitability %>, <%= @current_year_profitability %>],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: false,
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
+    }
   });
+
+
+  // Time chart
+  const ctxTime = document.getElementById('timeChart').getContext('2d');
+  const months = <%= raw @months.to_json %>;
+  const soldEntries = <%= raw @sold_entries_data.to_json %>;
+  const spentTime = <%= raw @spent_time_data.to_json %>;
+
+  new Chart(ctxTime, {
+  type: 'line',
+  data: {
+    labels: months,
+    datasets: [
+      {
+        label: 'Sold Entries (EUR)',
+        data: soldEntries,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        fill: false,
+        tension: 0.1
+      },
+      {
+        label: 'Total Spent Time (EUR)',
+        data: spentTime,
+        borderColor: 'rgba(255, 99, 132, 1)',
+        fill: false,
+        tension: 0.1
+      }
+    ]
+  },
+  options: {
+    responsive: false,
+    plugins: {
+      legend: { position: 'top' },
+      title: { display: true, text: 'Current Year: Sold Entries vs. Total Spent Time' }
+    }
+  }
+});
 </script>
