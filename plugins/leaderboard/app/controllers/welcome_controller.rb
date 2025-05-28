@@ -45,8 +45,8 @@ class WelcomeController < ApplicationController
     spent_time_by_month = spent_time_by_month.transform_keys { |k| k.to_i }
 
     months = (1..12).to_a
-    sold_entries_data = months.map { |m| sold_entries_by_month[m] || 0 }
-    spent_time_data = months.map { |m| spent_time_by_month[m] || 0 }
+    sold_entries_data = months.map { |m| sold_entries_by_month[m]&.round(2) || 0 }
+    spent_time_data = months.map { |m| spent_time_by_month[m]&.round(2) || 0 }
 
     @months = Date::MONTHNAMES.compact
     @sold_entries_data = sold_entries_data
