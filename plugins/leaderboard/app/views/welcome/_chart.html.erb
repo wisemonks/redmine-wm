@@ -13,7 +13,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-  // Income chart
+  // Income chart (bar chart)
   let ctxIncome = document.getElementById('incomeChart').getContext('2d');
   new Chart(ctxIncome, {
     type: 'bar',
@@ -45,7 +45,7 @@
   });
 
 
-  // Time chart
+  // Time chart (line 1: total sold hours for a given month; line 2: total spent hours for a given month)
   const ctxTime = document.getElementById('timeChart').getContext('2d');
   const months = <%= raw @months.to_json %>;
   const soldEntries = <%= raw @sold_entries_data.to_json %>;

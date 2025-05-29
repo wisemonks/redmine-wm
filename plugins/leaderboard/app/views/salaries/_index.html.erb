@@ -1,6 +1,4 @@
-<%# memberships = principal.memberships.preload(:member_roles, :roles).sorted_by_project.to_a %>
 <% salaries = @user.salaries %>
-<%# <p><%= link_to l(:label_add_projects), new_principal_membership_path(principal), :remote => true, :class => "icon icon-add" ></p>%>
 <%= link_to l(:button_add), new_user_salary_path(@user), :remote => true, :class => "icon icon-add" %>
 
 <% if salaries.any? %>
