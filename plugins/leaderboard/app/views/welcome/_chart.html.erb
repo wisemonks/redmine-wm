@@ -1,15 +1,21 @@
 <h3>Yearly income</h3>
 
-<div class="chart-container" style="display: flex; flex-direction: row; width: 100%">
+<div class="chart-container" style="display: flex; flex-direction: row; width: 100%; flex-wrap: wrap;">
   <canvas id="incomeChart" width="700" height="600"></canvas>
   <canvas id="timeChart" width="700" height="600"></canvas>
 </div>
 
+<h3>User's profitability</h3>
+
+<div class="chart-container" style="display: flex; flex-direction: row; width: 100%; flex-wrap: wrap;">
+  <canvas id="profitChart" width="700" height="600"></canvas>
+</div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 <script>
-  // Income chart
+  // Income chart (bar chart)
   let ctxIncome = document.getElementById('incomeChart').getContext('2d');
-  let incomeChart = new Chart(ctxIncome, {
+  new Chart(ctxIncome, {
     type: 'bar',
     data: {
       // labels: ['2024', '2025'],
@@ -39,39 +45,74 @@
   });
 
 
-  // Time chart
+  // Time chart (line 1: total sold hours for a given month; line 2: total spent hours for a given month)
   const ctxTime = document.getElementById('timeChart').getContext('2d');
   const months = <%= raw @months.to_json %>;
   const soldEntries = <%= raw @sold_entries_data.to_json %>;
   const spentTime = <%= raw @spent_time_data.to_json %>;
 
   new Chart(ctxTime, {
-  type: 'line',
-  data: {
-    labels: months,
-    datasets: [
-      {
-        label: 'Sold Entries (EUR)',
-        data: soldEntries,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        fill: false,
-        tension: 0.1
-      },
-      {
-        label: 'Total Spent Time (EUR)',
-        data: spentTime,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        fill: false,
-        tension: 0.1
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Sold hours',
+          data: soldEntries,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          fill: false,
+          tension: 0.1
+        },
+        {
+          label: 'Spent hours',
+          data: spentTime,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          fill: false,
+          tension: 0.1
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: 'Current Year: Sold Entries vs. Total Spent Time' }
       }
-    ]
-  },
-  options: {
-    responsive: false,
-    plugins: {
-      legend: { position: 'top' },
-      title: { display: true, text: 'Current Year: Sold Entries vs. Total Spent Time' }
     }
-  }
-});
+  });
+
+  // Profit chart (line 1: user salary; line 2: sold entries for the user's projects)
+  const ctxProfit = document.getElementById('profitChart').getContext('2d');
+  const userSalaries = <%= raw @user_salaries_data.to_json %>
+  const userSoldEntries = <%= raw @user_sold_entries_data.to_json %>
+
+  new Chart(ctxProfit, {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {
+          label: 'Salary (EUR)',
+          data: userSalaries,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          fill: false,
+          tension: 0.1
+        },
+        {
+          label: 'Sold hours (EUR)',
+          data: userSoldEntries,
+          borderColor: 'rgba(75, 192, 192, 1)',
+          fill: false,
+          tension: 0.1
+        }
+      ]
+    },
+    options: {
+      responsive: false,
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: true, text: 'Current Year: User Salaries vs. User Sold Entries' }
+      }
+    }
+  });
 </script>

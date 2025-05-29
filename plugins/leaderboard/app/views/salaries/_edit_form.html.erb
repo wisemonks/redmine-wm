@@ -1,0 +1,14 @@
+<p>
+  <%= f.label :salary %>
+  <%= f.number_field :salary %>
+</p>
+
+<p>
+  <%= f.label :from %>
+  <%= f.date_field :from %><%= calendar_for('salary_from') %>
+</p>
+
+<p>
+  <%= f.label :to %>
+  <%= f.date_field :to %><%= calendar_for('salary_to') %>
+</p>

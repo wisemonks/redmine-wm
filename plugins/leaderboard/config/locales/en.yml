@@ -2,3 +2,9 @@ en:
   label_sold_hours: Sold hours
   label_sold_hours_in_eur: Sold hours in EUR
   label_difference_ratio: Difference ratio
+  label_salary_plural: Salaries
+  label_add_salaries: Add Salaries
+  label_from: From
+  label_to: To
+  label_salary: Salary (€)
+  label_edit_salaries: Edit Salaries
