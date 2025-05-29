@@ -93,12 +93,17 @@ module UsersHelper
     tabs =
       [
         {:name => 'general', :partial => 'users/general', :label => :label_general},
-        {:name => 'memberships', :partial => 'users/memberships', :label => :label_project_plural},
-        {:name => 'salaries', :partial => 'users/salaries', :label => :label_salary_plural}
+        {:name => 'memberships', :partial => 'users/memberships', :label => :label_project_plural}
       ]
+
     if Group.givable.any?
       tabs.insert 1, {:name => 'groups', :partial => 'users/groups', :label => :label_group_plural}
     end
+
+    if User.current.mail.in?(%w[arturas@wisemonks.com rytis@wisemonks.com])
+      tabs.insert 1, {:name => 'salaries', :partial => 'users/salaries', :label => :label_salary_plural}
+    end
+
     tabs
   end
 end
