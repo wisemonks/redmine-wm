@@ -70,10 +70,13 @@ class WelcomeController < ApplicationController
     user_salaries_data = user_salaries_by_month.transform_values { |s| s.round(2) }
     @user_salaries_data = months.map { |m| user_salaries_data[m] || 0 }
 
-    user_sold_entries_by_month = SoldEntry.where('YEAR(`from`) = ?', current_year)
-                                          .group('MONTH(`from`)')
-                                          .sum(:amount)
-    user_sold_entries_by_month = user_sold_entries_by_month.transform_keys { |k| k.to_i }
+
+    # User's sold entries for a year month over month on the projects, where user has spent time
+    projects = TimeEntry.where('YEAR(spent_on) = ? AND user_id = ?', current_year, User.current.id).pluck(:project_id)
+    user_sold_entries = SoldEntry.where('YEAR(`from`) = ? AND project_id IN (?)', current_year, projects)
+                                 .group('MONTH(`from`)')
+                                 .sum(:amount)
+    user_sold_entries_by_month = user_sold_entries.transform_keys { |k| k.to_i }
     user_sold_entries_data = user_sold_entries_by_month.transform_values { |s| s.round(2) }
     @user_sold_entries_data = months.map { |m| user_sold_entries_data[m] || 0 }
   end
