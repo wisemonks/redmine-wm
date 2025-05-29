@@ -1,0 +1,9 @@
+<h3 class="title"><%= l(:label_edit_salaries) %></h3>
+
+<%= form_for :salary, :url => user_salary_path(user_id: @user.id, id: @salary.id), :method => :put do |f| %>
+  <%= render :partial => 'edit_form', :locals => { :f => f } %>
+  <p class="buttons">
+    <%= submit_tag l(:button_save), :name => nil %>
+    <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+  </p>
+<% end %>

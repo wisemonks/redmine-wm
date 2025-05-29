@@ -1,0 +1,38 @@
+<%# memberships = principal.memberships.preload(:member_roles, :roles).sorted_by_project.to_a %>
+<% salaries = @user.salaries %>
+<%# <p><%= link_to l(:label_add_projects), new_principal_membership_path(principal), :remote => true, :class => "icon icon-add" ></p>%>
+<%= link_to l(:button_add), new_user_salary_path(@user), :remote => true, :class => "icon icon-add" %>
+
+<% if salaries.any? %>
+  <table class="list">
+    <thead>
+      <tr>
+        <th><%= l(:label_from) %></th>
+        <th><%= l(:label_to) %></th>
+        <th><%= l(:label_salary) %></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% salaries.each do |salary| %>
+        <tr>
+          <td><%= salary.from %></td>
+          <td><%= salary.to %></td>
+          <td><%= salary.salary.round(2) %></td>
+          <td class="buttons">
+            <%= link_to l(:button_edit), edit_user_salary_path(@user, salary), :remote => true, :class => "icon icon-edit" %>
+            <%= link_to l(:button_delete), user_salary_path(@user, salary), :method => :delete, :data => { :confirm => l(:text_are_you_sure) }, :class => "icon icon-del" %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td></td>
+        <td><strong><%= l(:label_total) %></strong></td>
+        <td><strong><%= @user.salaries.sum(:salary).round(2) %></strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+<% else %>
+  <p class="nodata"><%= l(:label_no_data) %></p>
+<% end %>

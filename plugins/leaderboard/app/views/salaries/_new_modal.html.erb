@@ -1,0 +1,9 @@
+<h3 class="title"><%= l(:label_add_salaries) %></h3>
+
+<%= form_for :salary, :url => user_salaries_path(user_id: @user.id), :method => :post do |f| %>
+  <%= render :partial => 'new_form', :locals => { :f => f } %>
+  <p class="buttons">
+    <%= submit_tag l(:button_add), :name => nil %>
+    <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+  </p>
+<% end %>
