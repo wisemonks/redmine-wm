@@ -63,7 +63,7 @@ class WelcomeController < ApplicationController
     # User's profitability line chart:
     # Line 1: User's salaries for a year month over month
     # Line 2: Sold Entries for a given month on the projects', where user has spent time
-    user_salaries = Salary.where('YEAR(`from`) = ?', current_year)
+    user_salaries = Salary.where('YEAR(`from`) = ? AND user_id = ?', current_year, User.current.id)
                           .group('MONTH(`from`)')
                           .sum(:salary)
     user_salaries_by_month = user_salaries.transform_keys { |k| k.to_i }
