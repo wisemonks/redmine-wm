@@ -67,7 +67,7 @@ class WelcomeController < ApplicationController
                           .group('MONTH(`from`)')
                           .sum(:salary)
     user_salaries_by_month = user_salaries.transform_keys { |k| k.to_i }
-    user_salaries_data = user_salaries_by_month.transform_values { |s| (s * 2).round(2) }
+    user_salaries_data = user_salaries_by_month.transform_values { |s| s.round(2) }
     @user_salaries_data = months.map { |m| user_salaries_data[m] || 0 }
 
     user_sold_entries_by_month = SoldEntry.where('YEAR(`from`) = ?', current_year)
