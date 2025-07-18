@@ -41,6 +41,7 @@ append :linked_dirs, "log", "files", "tmp/pids", "tmp/cache", "tmp/sockets", "tm
 set :whenever_roles, "whenever"
 
 Rake::Task["deploy:assets:precompile"].clear_actions
+Rake::Task["deploy:assets:backup_manifest"].clear_actions
 
 namespace :deploy do
   # Declares a task to be executed once the new code is on the server.
