@@ -21,6 +21,6 @@ every 1.week, roles: [:whenever] do
   rails "leaderboards:calculate_project_profitability"
 end
 
-every '0 16 * * 1-5', roles: [:whenever] do
+every '0 12 * * 1-5', roles: [:whenever] do
   rails "leaderboards:send_reminders"
 end
