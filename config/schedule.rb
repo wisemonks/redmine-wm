@@ -20,3 +20,7 @@ end
 every 1.week, roles: [:whenever] do
   rails "leaderboards:calculate_project_profitability"
 end
+
+every :monday, :tuesday, :wednesday, :thursday, :friday, at: '16:00', roles: [:whenever] do
+  rails "leaderboards:send_reminders"
+end

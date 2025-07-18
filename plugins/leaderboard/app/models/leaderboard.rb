@@ -1,18 +1,5 @@
 class Leaderboard < ActiveRecord::Base
-  # This model is used to calculate every user's spent time over the last two months.
-  # Then, 'Performance' channel receives a message containing their spent time, comparison with the previous month, and each users' rank.
-  MATTERMOST_USERS = {
-    'performance': 'soibe9qnefn53y4yu7tu8zg9ce', # Performance channel
-    'digest': 'z4nsrwfuujbaxned3t6hdczzhe', # AI digest channel
-  }
-  BEARER = ENV['MATTERMOST_BEARER']
-
   def self.calculate_leaderboard
-    mattermost_url = 'https://mattermost.wisemonks.com/api/v4/posts'
-    headers = {
-      'Authorization' => 'Bearer ' + BEARER
-    }
-    body = { 'channel_id' => MATTERMOST_USERS[:digest] }
     table_markup = "|Ranking|Monk|This month|Last month|Change|Target|
     |---|---|---|---|---|---|"
 
@@ -26,14 +13,9 @@ class Leaderboard < ActiveRecord::Base
       table_markup += "\n|##{index+1}|#{user.name}|#{spent_hours.round(2)}hrs|#{spent_hours_32_offset.round(2)}hrs|#{difference.round(2)}hrs|120hrs|"
     end
 
-    body['message'] = mattermost_greet_message
-    response = HTTParty.post(mattermost_url, :headers => headers, :body => body.to_json)
-
-    body['message'] = table_markup
-    response = HTTParty.post(mattermost_url, :headers => headers, :body => body.to_json)
-
-    body['message'] = mattermost_bye_message
-    response = HTTParty.post(mattermost_url, :headers => headers, :body => body.to_json)
+    Mattermost::Base.new.post_message('digest', Leaderboard.mattermost_greet_message)
+    Mattermost::Base.new.post_message('digest', table_markup)
+    Mattermost::Base.new.post_message('digest', Leaderboard.mattermost_bye_message)
   end
 
   def self.calculate_project_profitability(from = Date.today.last_month.beginning_of_month, to = Date.today.last_month.end_of_month)
@@ -93,6 +75,16 @@ class Leaderboard < ActiveRecord::Base
     B1::B1.new.request('warehouse/sales/list', params)
   rescue StandardError => e
     Rails.logger.error "Failed to fetch sales from B1: #{e.message}"
+  end
+
+  def self.send_reminders
+    ['arturas', 'rytis', 'rokas', 'raminta', 'agneta', 'edvinas', 'adomas', 'viktorija'].each do |user|
+      Mattermost::Base.new.post_message(user, Leaderboard.mattermost_reminder_message)
+    end
+  end
+
+  def self.mattermost_reminder_message
+    "Labas, nepamiršk pasižymėti pradirbtų valandų! :muscle: \nhttps://redmine.wisemonks.com/time_entries"
   end
 
   def self.mattermost_greet_message

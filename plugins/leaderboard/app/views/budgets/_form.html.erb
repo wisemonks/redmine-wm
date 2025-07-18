@@ -1,0 +1,11 @@
+<%= form_with(model: [@project, @budget], remote: true) do |form| %>
+  <div class="field">
+    <%= form.label :budget %>
+    <%= form.number_field :budget, step: :any, required: true %>
+  </div>
+
+  <div class="buttons">
+    <%= submit_tag l(:button_add), :name => nil %>
+    <%= link_to_function l(:button_cancel), "hideModal(this);" %>
+  </div>
+<% end %>

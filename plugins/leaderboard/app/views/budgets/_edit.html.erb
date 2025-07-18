@@ -1,0 +1,5 @@
+<h3 class="title"><%= l(:label_edit_budget) %></h3>
+
+<%= form_for :budget, :url => project_budget_path(@project, @budget), :method => :put do |f| %>
+  <%= render :partial => 'form', :locals => { :f => f } %>
+<% end %>

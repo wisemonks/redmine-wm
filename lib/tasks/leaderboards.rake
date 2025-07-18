@@ -1,4 +1,9 @@
 namespace :leaderboards do
+  desc "Send reminders to fill in the spent time for current day"
+  task :send_reminders => :environment do
+    Leaderboard.send_reminders
+  end
+
   desc "Send spent hours to admins and users"
   task :send_leaderboards => :environment do
     Leaderboard.calculate_leaderboard

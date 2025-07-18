@@ -5,3 +5,8 @@
 resources :users do
   resources :salaries
 end
+
+# routes for budgets for project scope
+resources :projects do
+  resources :budgets
+end

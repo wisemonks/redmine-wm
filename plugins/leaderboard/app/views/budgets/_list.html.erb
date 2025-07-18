@@ -1,0 +1,21 @@
+<table class="list">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Budget (EUR)</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @budgets.each do |budget| %>
+      <tr id="budget-<%= budget.id %>">
+        <td><%= budget.created_at.to_s(:short) %></td>
+        <td><%= budget.budget %></td>
+        <td class="buttons">
+          <%= link_to 'Edit', edit_project_budget_path(@project, budget), class: 'icon icon-edit', remote: true if User.current.admin? %>
+          <%= link_to 'Delete', project_budget_path(@project, budget), method: :delete, data: { confirm: 'Are you sure?' }, class: 'icon icon-del', remote: true if User.current.admin? %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

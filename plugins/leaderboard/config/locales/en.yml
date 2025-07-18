@@ -8,3 +8,6 @@ en:
   label_to: To
   label_salary: Salary (€)
   label_edit_salaries: Edit Salaries
+  label_budget: Budget
+  label_add_budget: Add Budget
+  label_edit_budget: Edit Budget

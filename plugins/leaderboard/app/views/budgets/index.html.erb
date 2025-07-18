@@ -1,0 +1,12 @@
+<h2>Budgets</h2>
+
+<div class="contextual">
+  <%= link_to l(:button_add), new_project_budget_path(@project), class: 'icon icon-add', remote: true %>
+</div>
+
+<div id="budget-list">
+  <%= render 'list' %>
+</div>
+
+<div id="modal-container"></div>
+
