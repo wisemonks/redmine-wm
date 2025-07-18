@@ -93,6 +93,7 @@ end
 group :development do
   gem 'yard'
   gem 'capistrano'
+  gem 'capistrano-rails'
   gem 'capistrano3-puma'
   gem 'capistrano-bundler'
   gem 'capistrano-rbenv'
