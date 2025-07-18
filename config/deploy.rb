@@ -40,7 +40,9 @@ append :linked_dirs, "log", "files", "tmp/pids", "tmp/cache", "tmp/sockets", "tm
 # set :ssh_options, verify_host_key: :secure
 set :whenever_roles, "whenever"
 
-task "deploy:assets:precompile", :roles => lambda { assets_roles }
+task :'deploy:assets:precompile' do
+  # This is an empty task to override the default one from capistrano-rails
+end
 
 namespace :deploy do
   # Declares a task to be executed once the new code is on the server.
