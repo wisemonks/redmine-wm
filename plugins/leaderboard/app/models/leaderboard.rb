@@ -78,7 +78,7 @@ class Leaderboard < ActiveRecord::Base
   end
 
   def self.send_reminders
-    ['rokas', 'raminta', 'agneta', 'edvinas', 'adomas', 'viktorija'].each do |user|
+    ['rokas', 'raminta', 'agneta', 'edvinas', 'adomas'].each do |user|
       Mattermost::Base.new.post_message(user, Leaderboard.mattermost_reminder_message)
     end
   end
@@ -105,7 +105,7 @@ class Leaderboard < ActiveRecord::Base
       169 => 0, # Agneta
       172 => 0, # Edvinas
       178 => 0, # Adomas
-      179 => 0 # Viktorija
+      # 179 => 0 # Viktorija
     }
   end
 end

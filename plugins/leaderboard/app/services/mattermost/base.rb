@@ -11,7 +11,7 @@ module Mattermost
       'agneta' => 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
       'edvinas' => 'mfh6rnigmiy7zrptoeioytfc8c', # Edvinas
       'adomas' => 'bh8ojm7jmffomxrm84gbphruah', # Adomas
-      'viktorija' => 'hofdhsfd9jnzxfwze9c5i1d11w' # Viktorija
+      # 'viktorija' => 'hofdhsfd9jnzxfwze9c5i1d11w' # Viktorija
     }
 
     def initialize
