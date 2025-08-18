@@ -1,23 +1,29 @@
 class TasksController < ApplicationController
+  before_action :authorize_token
   before_action :set_channel
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
 
   def index
-    statuses = IssueStatus.where(name: ['New'])
-    tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
-    @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
+    # statuses = IssueStatus.where(name: ['New'])
+    # tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
+    # @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
 
-    table = "Issues found: #{tasks_count}\n\n"
-    table += "| Project | ID | Subject |\n"
-    table += "|---|---|---|\n"
-    @tasks.each do |task|
-      table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
-    end
+    # table = "Issues found: #{tasks_count}\n\n"
+    # table += "| Project | ID | Subject |\n"
+    # table += "|---|---|---|\n"
+    # @tasks.each do |task|
+    #   table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
+    # end
     
-    Mattermost::Base.new.post_message(@channel, table)
+    # Mattermost::Base.new.post_message(@channel, table)
 
-    render success: true
+    # render success: true
+    render json: {
+      response_type: 'ephemeral',
+      text: 'Great',
+      username: 'Redmine Bot'
+    }
   end
 
   def review
@@ -115,5 +121,18 @@ class TasksController < ApplicationController
 
   def set_user
     @user = Mattermost::Base::MATTERMOST_CHANNELS.find { |_, v| v == params[:channel_name] }&.first || 134
+  end
+
+  def authorize_token
+    token = request.headers['Authorization'].split(' ')[1]
+    allowed_tokens = Rails.application.credentials.mattermost[:slash].values
+
+    if !allowed_tokens.include?(token)
+      render json: {
+        response_type: 'ephemeral',
+        text: 'Unauthorized',
+        username: 'Redmine Bot'
+      }
+    end
   end
 end
