@@ -1,0 +1,3 @@
+Mattermost plugin for Redmine
+
+Description goes here

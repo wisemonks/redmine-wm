@@ -1,16 +1,17 @@
 module Mattermost
   class Base
     MATTERMOST_CHANNELS = {
+      'valandiniai': '8yhkbwaxkt8ibfd6w4pd7ao6dr', # Valandiniai channel
       'performance': 'soibe9qnefn53y4yu7tu8zg9ce', # Performance channel
       'digest': 'z4nsrwfuujbaxned3t6hdczzhe', # AI digest channel
-      'arturas' => '8bobf9fiqbryfrkr6ciz3rm5ww', # Artūras
-      'rytis' => '4qa8z84metdo5gozjwbjr5geho', # Rytis
-      'rokas' => 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
-      'raminta' => 'store77e87g7zjuxi3ieg31roy', # Raminta
-      'monika' => 'pabetp7expfrdniyy66a654c1e', # Monika
-      'agneta' => 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
-      'edvinas' => 'mfh6rnigmiy7zrptoeioytfc8c', # Edvinas
-      'adomas' => 'bh8ojm7jmffomxrm84gbphruah', # Adomas
+      'arturas': '8bobf9fiqbryfrkr6ciz3rm5ww', # Artūras
+      'rytis': '4qa8z84metdo5gozjwbjr5geho', # Rytis
+      'rokas': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
+      'raminta': 'store77e87g7zjuxi3ieg31roy', # Raminta
+      'monika': 'pabetp7expfrdniyy66a654c1e', # Monika
+      'agneta': 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
+      'edvinas': 'mfh6rnigmiy7zrptoeioytfc8c', # Edvinas
+      'adomas': 'bh8ojm7jmffomxrm84gbphruah', # Adomas
       # 'viktorija' => 'hofdhsfd9jnzxfwze9c5i1d11w' # Viktorija
     }
 
