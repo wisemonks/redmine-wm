@@ -14,15 +14,13 @@ class TasksController < ApplicationController
     @tasks.each do |task|
       table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
     end
-    
-    Mattermost::Base.new.post_message(@channel, table)
+    # Mattermost::Base.new.post_message(@channel, table)
 
-    render success: true
-    # render json: {
-    #   response_type: 'ephemeral',
-    #   text: 'Great',
-    #   username: 'Redmine Bot'
-    # }
+    render json: {
+      response_type: 'ephemeral',
+      text: table,
+      username: 'Redmine Bot'
+    }
   end
 
   def review
