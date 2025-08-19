@@ -1,10 +1,10 @@
-class TasksController < ApplicationController
-  before_action :authorize_token
+class TasksController < ActionController::Base
+  # before_action :authorize_token
   before_action :set_channel
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
 
-  accept_api_auth :index, :review, :resolve, :finish, :spent
+  # accept_api_auth :index, :review, :resolve, :finish, :spent
 
   def index
     # statuses = IssueStatus.where(name: ['New'])
