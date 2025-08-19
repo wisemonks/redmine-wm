@@ -23,12 +23,12 @@ class TasksController < ApplicationController
     
     # Mattermost::Base.new.post_message(@channel, table)
 
-    # render success: true
-    render json: {
-      response_type: 'ephemeral',
-      text: 'Great',
-      username: 'Redmine Bot'
-    }
+    render success: true
+    # render json: {
+    #   response_type: 'ephemeral',
+    #   text: 'Great',
+    #   username: 'Redmine Bot'
+    # }
   end
 
   def review
