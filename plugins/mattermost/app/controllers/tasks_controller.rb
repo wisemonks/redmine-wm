@@ -1,4 +1,4 @@
-class TasksController < ActionController::Base
+class TasksController < ApplicationController
   include ActionController::MimeResponds
   include ActionController::ImplicitRender
   protect_from_forgery with: :null_session
