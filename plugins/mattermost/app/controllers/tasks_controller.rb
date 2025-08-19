@@ -1,4 +1,7 @@
-class TasksController < ActionController::Base
+class TasksController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  skip_before_action :check_if_login_required
+
   # before_action :authorize_token
   before_action :set_channel
   before_action :set_issue, except: [:index]
