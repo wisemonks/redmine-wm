@@ -1,27 +1,21 @@
 class TasksController < ApplicationController
-  include ActionController::MimeResponds
-  include ActionController::ImplicitRender
-  protect_from_forgery with: :null_session
-
-  skip_before_action :verify_authenticity_token
-
   before_action :set_channel
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
 
   def index
-    # statuses = IssueStatus.where(name: ['New'])
-    # tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
-    # @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
+    statuses = IssueStatus.where(name: ['New'])
+    tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
+    @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
 
-    # table = "Issues found: #{tasks_count}\n\n"
-    # table += "| Project | ID | Subject |\n"
-    # table += "|---|---|---|\n"
-    # @tasks.each do |task|
-    #   table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
-    # end
+    table = "Issues found: #{tasks_count}\n\n"
+    table += "| Project | ID | Subject |\n"
+    table += "|---|---|---|\n"
+    @tasks.each do |task|
+      table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
+    end
     
-    # Mattermost::Base.new.post_message(@channel, table)
+    Mattermost::Base.new.post_message(@channel, table)
 
     render success: true
     # render json: {
