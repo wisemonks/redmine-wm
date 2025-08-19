@@ -18,7 +18,7 @@ module Mattermost
     def initialize
       @mattermost_url = 'https://mattermost.wisemonks.com/api/v4/posts'
       @headers = {
-        'Authorization' => 'Bearer ' + ENV['MATTERMOST_BEARER']
+        'Authorization' => 'Bearer ' + Rails.application.credentials.mattermost[:bearer]
       }  
     end
 
