@@ -84,7 +84,8 @@ module RedmineApp
 
     # Configure log level here so that additional environment file
     # can change it (environments/ENV.rb would take precedence over it)
-    config.log_level = Rails.env.production? ? :info : :debug
+    # config.log_level = Rails.env.production? ? :info : :debug
+    config.log_level = :debug
 
     config.session_store(
       :cookie_store,
