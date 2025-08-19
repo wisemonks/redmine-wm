@@ -4,6 +4,8 @@ class TasksController < ApplicationController
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
 
+  accept_api_auth :index, :review, :resolve, :finish, :spent
+
   def index
     # statuses = IssueStatus.where(name: ['New'])
     # tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
