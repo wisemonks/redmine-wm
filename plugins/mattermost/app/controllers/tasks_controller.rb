@@ -1,13 +1,13 @@
-class TasksController < ApplicationController
-  skip_before_action :verify_authenticity_token
-  skip_before_action :check_if_login_required
+class TasksController < ActionController::Base
+  include ActionController::MimeResponds
+  include ActionController::ImplicitRender
+  protect_from_forgery with: :null_session
 
-  # before_action :authorize_token
+  skip_before_action :verify_authenticity_token
+
   before_action :set_channel
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
-
-  # accept_api_auth :index, :review, :resolve, :finish, :spent
 
   def index
     # statuses = IssueStatus.where(name: ['New'])
