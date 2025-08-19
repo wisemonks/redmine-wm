@@ -1,23 +1,22 @@
 class TasksController < ApplicationController
-  before_action :set_channel
+  before_action :set_channel, :authorize_token
   before_action :set_issue, except: [:index]
   before_action :set_user, only: [:spent]
 
   def index
-    statuses = IssueStatus.where(name: ['New'])
+    statuses = IssueStatus.where(name: ['New', 'Estimated'])
     tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
     @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
 
-    table = "Issues found: #{tasks_count}\n\n"
+    table = "Available issues found: #{tasks_count}\n\n"
     table += "| Project | ID | Subject |\n"
     table += "|---|---|---|\n"
     @tasks.each do |task|
       table += "| [#{task.project.name}](https://redmine.wisemonks.com/projects/#{task.project.name}) | #{task.id} | [#{task.subject}](https://redmine.wisemonks.com/issues/#{task.id}) |\n"
     end
-    # Mattermost::Base.new.post_message(@channel, table)
 
     render json: {
-      response_type: 'ephemeral',
+      response_type: params[:channel_name].eql?('valandiniai') ? 'in_channel' : 'ephemeral',
       text: table,
       username: 'Redmine Bot'
     }
@@ -36,9 +35,11 @@ class TasksController < ApplicationController
       message = "@all [#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is available for a review."
     end
     
-    Mattermost::Base.new.post_message(@channel, message)
-
-    render success: true
+    render json: {
+      response_type: @issue.nil? ? 'ephemeral' : 'in_channel',
+      text: message,
+      username: 'Redmine Bot'
+    }
   end
 
   def resolve
@@ -48,14 +49,17 @@ class TasksController < ApplicationController
       message = "Issue not found"
     else
       @issue.status_id = statuses.first.id # 'Resolved (Not Published)'
+      @issue.assigned_to_id = 134 # Rytis
       @issue.save
 
       message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is resolved."
     end
     
-    Mattermost::Base.new.post_message(@channel, message)
-
-    render success: true
+    render json: {
+      response_type: @issue.nil? ? 'ephemeral' : 'in_channel',
+      text: message,
+      username: 'Redmine Bot'
+    }
   end
 
   def finish
@@ -65,14 +69,17 @@ class TasksController < ApplicationController
       message = "Issue not found"
     else
       @issue.status_id = statuses.first.id # 'Resolved'
+      @issue.assigned_to_id = 134 # Rytis
       @issue.save
 
       message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is finished."
     end
     
-    Mattermost::Base.new.post_message(@channel, message)
-
-    render success: true
+    render json: {
+      response_type: @issue.nil? ? 'ephemeral' : 'in_channel',
+      text: message,
+      username: 'Redmine Bot'
+    }
   end
 
   def spent
@@ -100,9 +107,11 @@ class TasksController < ApplicationController
       message = "Assigned #{params[:text].split(' ')[1]} hours to [#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id})."
     end
     
-    Mattermost::Base.new.post_message(@channel, message)
-
-    render success: true
+    render json: {
+      response_type: 'ephemeral',
+      text: message,
+      username: 'Redmine Bot'
+    }
   end
 
   private
@@ -122,9 +131,9 @@ class TasksController < ApplicationController
 
   def authorize_token
     token = request.headers['Authorization'].split(' ')[1]
-    allowed_tokens = Rails.application.credentials.mattermost[:slash].values
+    allowed_tokens = Rails.application.credentials[:mattermost][:slash].values
 
-    if !allowed_tokens.include?(token)
+    unless allowed_tokens.include?(token)
       render json: {
         response_type: 'ephemeral',
         text: 'Unauthorized',
