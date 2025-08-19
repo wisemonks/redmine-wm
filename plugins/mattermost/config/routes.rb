@@ -7,4 +7,11 @@
 # get 'finish', to: 'tasks#finish'
 # post 'spent', to: 'tasks#spent'
 
-resources :tasks, only: [:index, :review, :resolve, :finish, :spent]
+resources :tasks, only: [:index] do
+  member do
+    post :review
+    post :resolve
+    post :finish
+    post :spent
+  end
+end
