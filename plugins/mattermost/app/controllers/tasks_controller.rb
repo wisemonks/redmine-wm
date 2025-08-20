@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :set_channel, :authorize_token
   before_action :set_issue, except: [:index]
-  before_action :set_user, only: [:spent]
+  before_action :set_user, only: [:spent, :start]
 
   def index
     statuses = IssueStatus.where(name: ['New', 'Estimated'])
@@ -18,6 +18,26 @@ class TasksController < ApplicationController
     render json: {
       response_type: params[:channel_name].eql?('valandiniai') ? 'in_channel' : 'ephemeral',
       text: table,
+      username: 'Redmine Bot'
+    }
+  end
+
+  def start
+    statuses = IssueStatus.where(name: ['In Progress'])
+
+    if @issue.nil?
+      message = "Issue not found"
+    else
+      @issue.status_id = statuses.first.id # 'In Progress'
+      @issue.assigned_to_id = @user.id
+      @issue.save
+
+      message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is started."
+    end
+    
+    render json: {
+      response_type: 'ephemeral',
+      text: message,
       username: 'Redmine Bot'
     }
   end
@@ -126,7 +146,7 @@ class TasksController < ApplicationController
   end
 
   def set_user
-    @user = Mattermost::Base::MATTERMOST_CHANNELS.find { |_, v| v == params[:channel_name] }&.first || 134
+    @user = User.find_by(mattermost_user_id: params[:user_id])
   end
 
   def authorize_token
@@ -138,7 +158,7 @@ class TasksController < ApplicationController
         response_type: 'ephemeral',
         text: 'Unauthorized',
         username: 'Redmine Bot'
-      }
+      } and return
     end
   end
 end
