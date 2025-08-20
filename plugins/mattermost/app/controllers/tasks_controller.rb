@@ -150,7 +150,7 @@ class TasksController < ApplicationController
   end
 
   def authorize_token
-    token = request.headers['Authorization'].split(' ')[1]
+    token = params[:token]
     allowed_tokens = Rails.application.credentials[:mattermost][:slash].values
 
     unless allowed_tokens.include?(token)
