@@ -1,4 +1,4 @@
-class TasksController < ApplicationController
+class TasksController < ActionController::Base
   before_action :set_channel, :authorize_token
   before_action :set_project, only: [:index]
   before_action :set_issue, except: [:index, :assigned]
