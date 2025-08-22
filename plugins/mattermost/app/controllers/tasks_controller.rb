@@ -50,7 +50,7 @@ class TasksController < ActionController::Base
       message = "User not found"
     else
       @assigned_issues_count = Issue.where(assigned_to_id: @user.id).count
-      @assigned_issues = Issue.where(assigned_to_id: @user.id).limit(20)
+      @assigned_issues = Issue.where(assigned_to_id: @user.id).order(id: :desc).limit(20)
       message = "You have #{@assigned_issues_count} assigned issues.\n\n"
       message += "| Project | ID | Subject |\n"
       message += "|---|---|---|\n"
@@ -163,7 +163,7 @@ class TasksController < ActionController::Base
 
   def set_project
     @project = Project.where(identifier: params['text'].gsub('.', '-').gsub(' ', '-').gsub('(', '-').gsub(')', '-').downcase)
-    @project = Project.active if @project.nil?
+    @project = Project.active if @project.empty?
   end
 
   def set_channel
