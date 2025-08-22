@@ -19,7 +19,7 @@ class TasksController < ActionController::Base
     end
 
     render json: {
-      response_type: params[:channel_name].eql?('valandiniai') ? 'in_channel' : 'ephemeral',
+      response_type: params['channel_name'].eql?('valandiniai') ? 'in_channel' : 'ephemeral',
       text: table,
       username: 'Redmine Bot'
     }
@@ -149,7 +149,7 @@ class TasksController < ActionController::Base
         updated_on: Date.today
       )
 
-      message = "Assigned #{params[:text].split(' ')[1]} hours for #{@user.firstname} #{@user.lastname} to [#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id})."
+      message = "Assigned #{params['text'].split(' ')[1]} hours for #{@user.firstname} #{@user.lastname} to [#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id})."
     end
     
     render json: {
@@ -162,25 +162,25 @@ class TasksController < ActionController::Base
   private
 
   def set_project
-    @project = Project.find_by_name(params[:text].split(' ')[0])
+    @project = Project.find_by_name(params['text'].split(' ')[0])
     @project = Project.active if @project.nil?
   end
 
   def set_channel
-    @channel = Mattermost::Base::MATTERMOST_CHANNELS.find { |_, v| v == params[:channel_name] }&.first || 'valandiniai'
+    @channel = Mattermost::Base::MATTERMOST_CHANNELS.find { |_, v| v == params['channel_name'] }&.first || 'valandiniai'
   end
 
   def set_issue
-    id = params[:text].split(' ')[0]
+    id = params['text'].split(' ')[0]
     @issue = Issue.find_by_id(id)
   end
 
   def set_user
-    @user = User.find_by(mattermost_user_id: params[:user_id])
+    @user = User.find_by(mattermost_user_id: params['user_id'])
   end
 
   def authorize_token
-    token = params[:token]
+    token = params['token']
     allowed_tokens = Rails.application.credentials[:mattermost][:slash].values
 
     unless allowed_tokens.include?(token)
