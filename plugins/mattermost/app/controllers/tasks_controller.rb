@@ -162,7 +162,7 @@ class TasksController < ActionController::Base
   private
 
   def set_project
-    @project = Project.find_by_id(params['text'].split(' ')[0])
+    @project = Project.where(id: params['text'].split(' ')[0])
     @project = Project.active if @project.nil?
   end
 
