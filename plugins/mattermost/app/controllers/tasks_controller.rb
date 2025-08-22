@@ -162,7 +162,7 @@ class TasksController < ActionController::Base
   private
 
   def set_project
-    @project = Project.where(id: params['text'].split(' ')[0])
+    @project = Project.where(identifier: params['text'].gsub('.', '-').gsub(' ', '-').gsub('(', '-').gsub(')', '-').downcase)
     @project = Project.active if @project.nil?
   end
 
