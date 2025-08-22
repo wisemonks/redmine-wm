@@ -137,7 +137,7 @@ class TasksController < ActionController::Base
       TimeEntry.create(
         project_id: @issue.project_id,
         author_id: 134, # Rytis
-        user_id: @user,
+        user_id: @user.id,
         issue_id: @issue.id,
         hours: params['text'].split(' ')[1].to_f,
         activity_id: 9, # 'development'
@@ -162,7 +162,7 @@ class TasksController < ActionController::Base
   private
 
   def set_project
-    @project = Project.find_by_name(params['text'].split(' ')[0])
+    @project = Project.find_by_id(params['text'].split(' ')[0])
     @project = Project.active if @project.nil?
   end
 
@@ -171,8 +171,7 @@ class TasksController < ActionController::Base
   end
 
   def set_issue
-    id = params['text'].split(' ')[0]
-    @issue = Issue.find_by_id(id)
+    @issue = Issue.find_by_id(params['text'].split(' ')[0])
   end
 
   def set_user
