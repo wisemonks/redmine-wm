@@ -139,8 +139,9 @@ class TasksController < ActionController::Base
         author_id: 134, # Rytis
         user_id: @user,
         issue_id: @issue.id,
-        hours: params[:text].split(' ')[1],
+        hours: params['text'].split(' ')[1].to_f,
         activity_id: 9, # 'development'
+        spent_on: Date.today,
         tyear: Date.today.year,
         tmonth: Date.today.month,
         tweek: Date.today.cweek,
