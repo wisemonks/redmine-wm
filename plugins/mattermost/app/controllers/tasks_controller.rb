@@ -1,12 +1,14 @@
 class TasksController < ApplicationController
   before_action :set_channel, :authorize_token
-  before_action :set_issue, except: [:index]
-  before_action :set_user, only: [:spent, :start]
+  before_action :set_project, only: [:index]
+  before_action :set_issue, except: [:index, :assigned]
+  before_action :set_user, only: [:spent, :start, :assigned, :spent]
 
   def index
     statuses = IssueStatus.where(name: ['New', 'Estimated'])
-    tasks_count = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).count
-    @tasks = Issue.where(status_id: statuses, project_id: Project.active.pluck(:id)).where.not(project_id: [105]).order(id: :desc).limit(20)
+    tracker = Tracker.find_by_name('Design')
+    tasks_count = Issue.where(status_id: statuses, project_id: @project.pluck(:id)).where.not(project_id: [105], tracker_id: tracker.id).count
+    @tasks = Issue.where(status_id: statuses, project_id: @project.pluck(:id)).where.not(project_id: [105], tracker_id: tracker.id).order(id: :desc).limit(20)
 
     table = "Available issues found: #{tasks_count}\n\n"
     table += "| Project | ID | Subject |\n"
@@ -32,9 +34,29 @@ class TasksController < ApplicationController
       @issue.assigned_to_id = @user.id
       @issue.save
 
-      message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is started."
+      message = "[#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id}) is started by #{@user.firstname} #{@user.lastname}."
     end
     
+    render json: {
+      response_type: 'ephemeral',
+      text: message,
+      username: 'Redmine Bot'
+    }
+  end
+
+  def assigned
+    if @user.nil?
+      message = "User not found"
+    else
+      @assigned_issues = Issue.where(assigned_to_id: @user.id).limit(20)
+      message = "You have #{@assigned_issues.count} assigned issues."
+      message += "| Project | ID | Subject |\n"
+      message += "|---|---|---|\n"
+      @assigned_issues.each do |issue|
+        message += "| [#{issue.project.name}](https://redmine.wisemonks.com/projects/#{issue.project.name}) | #{issue.id} | [#{issue.subject}](https://redmine.wisemonks.com/issues/#{issue.id}) |\n"
+      end
+    end
+
     render json: {
       response_type: 'ephemeral',
       text: message,
@@ -52,7 +74,7 @@ class TasksController < ApplicationController
       @issue.assigned_to_id = 134 # Rytis
       @issue.save
 
-      message = "@all [#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is available for a review."
+      message = "@all [#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id}) is available for a review."
     end
     
     render json: {
@@ -72,7 +94,7 @@ class TasksController < ApplicationController
       @issue.assigned_to_id = 134 # Rytis
       @issue.save
 
-      message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is resolved."
+      message = "[#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id}) is resolved."
     end
     
     render json: {
@@ -92,7 +114,7 @@ class TasksController < ApplicationController
       @issue.assigned_to_id = 134 # Rytis
       @issue.save
 
-      message = "[#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id}) is finished."
+      message = "[#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id}) is finished. Total hours spent: #{@issue.time_entries.sum(:hours).round(2)}"
     end
     
     render json: {
@@ -106,7 +128,7 @@ class TasksController < ApplicationController
     if @issue.nil? || @user.nil?
       render json: {
         response_type: 'ephemeral',
-        text: 'Issue or user not found',
+        text: 'Whoopsie! An error occured.',
         username: 'Redmine Bot'
       }
     else
@@ -124,7 +146,7 @@ class TasksController < ApplicationController
         updated_on: Date.today
       )
 
-      message = "Assigned #{params[:text].split(' ')[1]} hours to [#{@issue.subject} (#{@issue.id})](https://redmine.wisemonks.com/issues/#{@issue.id})."
+      message = "Assigned #{params[:text].split(' ')[1]} hours for #{@user.firstname} #{@user.lastname} to [#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id})."
     end
     
     render json: {
@@ -135,6 +157,11 @@ class TasksController < ApplicationController
   end
 
   private
+
+  def set_project
+    @project = Project.find_by_name(params[:text].split(' ')[0])
+    @project = Project.active if @project.nil?
+  end
 
   def set_channel
     @channel = Mattermost::Base::MATTERMOST_CHANNELS.find { |_, v| v == params[:channel_name] }&.first || 'valandiniai'
