@@ -50,7 +50,7 @@ class TasksController < ActionController::Base
       message = "User not found"
     else
       @assigned_issues = Issue.where(assigned_to_id: @user.id).limit(20)
-      message = "You have #{@assigned_issues.count} assigned issues."
+      message = "You have #{@assigned_issues.count} assigned issues.\n"
       message += "| Project | ID | Subject |\n"
       message += "|---|---|---|\n"
       @assigned_issues.each do |issue|
