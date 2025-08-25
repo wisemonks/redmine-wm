@@ -80,19 +80,19 @@ module B1
           response.body
         end
       when 400
-        raise ActionController::BadRequest.new("Data validation failure.")
+        raise ActionController::BadRequest.new("Data validation failure. #{debug_info}")
       when 404
-        raise ActionController::RoutingError.new("Resource not found.")
+        raise ActionController::RoutingError.new("Resource not found. #{debug_info}")
       when 409
-        raise ActionController::RoutingError.new("Object already exists in the B1 system.")
+        raise ActionController::RoutingError.new("Object already exists in the B1 system. #{debug_info}")
       when 480
-        raise ActionController::RoutingError.new("Partial completion in the B1 system.")
+        raise ActionController::RoutingError.new("Partial completion in the B1 system. #{debug_info}")
       when 500
-        raise ActionController::RoutingError.new("B1 API internal error.")
+        raise ActionController::RoutingError.new("B1 API internal error. #{debug_info}")
       when 503
-        raise ActionController::RoutingError.new("B1 API is currently unavailable.")
+        raise ActionController::RoutingError.new("B1 API is currently unavailable. #{debug_info}")
       else
-        raise ActionController::RoutingError.new("B1 API fatal error.")
+        raise ActionController::RoutingError.new("B1 API fatal error. #{debug_info}")
       end
     end
   end
