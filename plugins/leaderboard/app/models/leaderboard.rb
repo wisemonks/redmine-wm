@@ -13,9 +13,9 @@ class Leaderboard < ActiveRecord::Base
       table_markup += "\n|##{index+1}|#{user.name}|#{spent_hours.round(2)}hrs|#{spent_hours_32_offset.round(2)}hrs|#{difference.round(2)}hrs|120hrs|"
     end
 
-    Mattermost::Base.new.post_message('digest', Leaderboard.mattermost_greet_message)
-    Mattermost::Base.new.post_message('digest', table_markup)
-    Mattermost::Base.new.post_message('digest', Leaderboard.mattermost_bye_message)
+    Mattermost::Base.new.post_message(:digest, Leaderboard.mattermost_greet_message)
+    Mattermost::Base.new.post_message(:digest, table_markup)
+    Mattermost::Base.new.post_message(:digest, Leaderboard.mattermost_bye_message)
   end
 
   def self.calculate_project_profitability(from = Date.today.last_month.beginning_of_month, to = Date.today.last_month.end_of_month)
@@ -78,7 +78,7 @@ class Leaderboard < ActiveRecord::Base
   end
 
   def self.send_reminders
-    ['rokas', 'raminta', 'agneta', 'edvinas', 'adomas'].each do |user|
+    [:rokas, :raminta, :agneta, :edvinas, :adomas].each do |user|
       Mattermost::Base.new.post_message(user, Leaderboard.mattermost_reminder_message)
     end
   end
