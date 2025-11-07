@@ -105,7 +105,7 @@ class Leaderboard < ActiveRecord::Base
       169 => 0, # Agneta
       172 => 0, # Edvinas
       178 => 0, # Adomas
-      # 179 => 0 # Viktorija
+      179 => 0 # Viktorija
     }
   end
 end
