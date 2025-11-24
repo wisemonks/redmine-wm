@@ -10,9 +10,7 @@ require 'capistrano/rails'
 require 'capistrano/rails/migrations'
 
 require 'capistrano/puma'
-install_plugin Capistrano::Puma  # Default puma tasks
-install_plugin Capistrano::Puma::Systemd  # if you use SystemD
-# install_plugin Capistrano::Puma::Nginx
+install_plugin Capistrano::Puma
 
 require "whenever/capistrano"
 
