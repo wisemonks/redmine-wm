@@ -82,6 +82,11 @@ module ProjectsHelper
       if project.description.present?
         s << content_tag('div', textilizable(project.short_description, :project => project), :class => 'wiki description')
       end
+      lead_developers = project.members.select { |member| member.roles.include?(Role.find_by_name('Lead Developer')) }
+      unless lead_developers.empty?
+        lead_developers = "Lead developers: #{lead_developers.map { |member| member.user.name }.join(', ')}"
+        s << content_tag('div', lead_developers.html_safe, :class => 'lead-developers')
+      end
       s
     end
   end
