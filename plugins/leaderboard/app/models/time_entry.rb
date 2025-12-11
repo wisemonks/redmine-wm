@@ -188,13 +188,13 @@ class TimeEntry < ActiveRecord::Base
       errors.add :base, I18n.t(:error_spent_on_future_date) if !Setting.timelog_accept_future_dates? && (spent_on > user.today)
     end
 
-    # can only be maximum 8 hours
-    errors.add :hours, 'can only be 8 hours or less (per day)' if hours > 8
-    # also check if user has already logged 8 hours on that day
-    errors.add :hours, 'can only be 8 hours or less (per day)' if (other_hours_with_same_user_and_day + hours) > 8
+    # # can only be maximum 8 hours
+    # errors.add :hours, 'can only be 8 hours or less (per day)' if hours > 8
+    # # also check if user has already logged 8 hours on that day
+    # errors.add :hours, 'can only be 8 hours or less (per day)' if (other_hours_with_same_user_and_day + hours) > 8
 
-    # can only be filled for today
-    errors.add :spent_on, 'can only be of today' if spent_on < Date.today || spent_on > Date.today
+    # # can only be filled for today
+    # errors.add :spent_on, 'can only be of today' if spent_on < Date.today || spent_on > Date.today
   end
 
   def hours=(h)
