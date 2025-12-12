@@ -13,14 +13,14 @@ job_type :rails,  %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment 
 job_type :runner, %q{ cd :path && PATH=:env_path:"$PATH" bin/rails runner -e :environment ':task' :output }
 job_type :script, %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment bundle exec bin/:task :output }
 
-every 1.week, roles: [:whenever] do
-  rails "leaderboards:send_leaderboards"
-end
+# every 1.week, roles: [:whenever] do
+#   rails "leaderboards:send_leaderboards"
+# end
 
-every 1.week, roles: [:whenever] do
-  rails "leaderboards:calculate_project_profitability"
-end
+# every 1.week, roles: [:whenever] do
+#   rails "leaderboards:calculate_project_profitability"
+# end
 
-every '0 16 * * 1-5', roles: [:whenever] do
-  rails "leaderboards:send_reminders"
-end
+# every '0 16 * * 1-5', roles: [:whenever] do
+#   rails "leaderboards:send_reminders"
+# end
