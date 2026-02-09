@@ -47,7 +47,8 @@ class TasksController < ActionController::Base
           status_id: status.id,
           priority_id: priority.id,
           subject: subject,
-          author_id: author.id
+          author_id: author.id,
+          assigned_to_id: author.id
         )
         
         if issue.save
