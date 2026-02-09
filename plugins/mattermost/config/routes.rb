@@ -4,6 +4,7 @@
 # get 'tasks', to: 'tasks#index', as: 'tasks'
 # point /tasks GET request to plugins/mattermost/app/controllers/tasks_controller.rb
 scope :mattermost do
+  post 'create', to: 'tasks#create', as: 'mattermost_create'
   get 'tasks', to: 'tasks#index', as: 'mattermost_tasks'
   get 'assigned', to: 'tasks#assigned', as: 'mattermost_assigned'
   post 'start', to: 'tasks#start', as: 'mattermost_start'

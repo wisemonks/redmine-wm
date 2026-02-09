@@ -2,7 +2,7 @@ class TasksController < ActionController::Base
   skip_before_action :verify_authenticity_token
   before_action :set_channel, :authorize_token
   before_action :set_project, only: [:index]
-  before_action :set_issue, except: [:index, :assigned]
+  before_action :set_issue, except: [:index, :create, :assigned]
   before_action :set_user, only: [:spent, :start, :assigned, :spent]
 
   def index
@@ -21,6 +21,52 @@ class TasksController < ActionController::Base
     render json: {
       response_type: params['channel_name'].eql?('valandiniai') ? 'in_channel' : 'ephemeral',
       text: table,
+      username: 'Redmine Bot'
+    }
+  end
+
+  def create
+    project = Project.find_by(identifier: 'wise-monks')
+    
+    if project.nil?
+      message = "Project 'wise-monks' not found"
+    else
+      subject = params['text'].to_s.strip
+      
+      if subject.blank?
+        message = "Subject cannot be empty. Usage: /create Issue subject"
+      else
+        tracker = Tracker.first
+        status = IssueStatus.find_by(name: 'New') || IssueStatus.first
+        priority = IssuePriority.default || IssuePriority.first
+        author = User.find_by(id: 134)
+        
+        issue = Issue.new(
+          project_id: project.id,
+          tracker_id: tracker.id,
+          status_id: status.id,
+          priority_id: priority.id,
+          subject: subject,
+          author_id: author.id
+        )
+        
+        if issue.save
+          watcher_ids = [134, 1, 186]
+          watcher_ids.each do |user_id|
+            user = User.find_by(id: user_id)
+            Watcher.create(watchable: issue, user: user) if user
+          end
+          
+          message = "Issue [##{issue.id} #{issue.subject}](https://redmine.wisemonks.com/issues/#{issue.id}) created."
+        else
+          message = "Failed to create issue: #{issue.errors.full_messages.join(', ')}"
+        end
+      end
+    end
+    
+    render json: {
+      response_type: 'in_channel',
+      text: message,
       username: 'Redmine Bot'
     }
   end
