@@ -193,7 +193,8 @@ class TasksController < ActionController::Base
         tmonth: Date.today.month,
         tweek: Date.today.cweek,
         created_on: Date.today,
-        updated_on: Date.today
+        updated_on: Date.today,
+        comments: 'Mattermost'
       )
 
       message = "Assigned #{params['text'].split(' ')[1]} hours for #{@user.firstname} #{@user.lastname} to [#{@issue.id} #{@issue.subject}](https://redmine.wisemonks.com/issues/#{@issue.id})."
