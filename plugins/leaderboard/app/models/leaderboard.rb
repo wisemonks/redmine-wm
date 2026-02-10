@@ -78,7 +78,7 @@ class Leaderboard < ActiveRecord::Base
   end
 
   def self.send_reminders
-    [:rokas, :raminta, :agneta, :edvinas, :adomas, :viktorija].each do |user|
+    [:rokas, :raminta, :agnetap, :edvinas, :adomas, :vilimaite].each do |user|
       Mattermost::Base.new.post_message(user, Leaderboard.mattermost_reminder_message)
     end
   end
