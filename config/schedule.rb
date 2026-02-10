@@ -25,6 +25,10 @@ job_type :script, %q{ cd :path && PATH=:env_path:"$PATH" RAILS_ENV=:environment 
 #   rails "leaderboards:send_reminders"
 # end
 
-every '0 10 * * 1-5', roles: [:whenever] do
-  rails "mattermost:daily_spent_time"
+every '0 10 * * 2-5', roles: [:whenever] do
+  rails "mattermost:yesterday_spent_time"
+end
+
+every '30 16 * * 5', roles: [:whenever] do
+  rails "mattermost:today_spent_time"
 end
