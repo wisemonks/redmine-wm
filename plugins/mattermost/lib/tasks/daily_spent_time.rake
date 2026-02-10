@@ -30,7 +30,7 @@ namespace :mattermost do
 
     report_data.sort_by! { |data| -data[:total_hours] }
     
-    message = "**Daily Spent Time Report for #{yesterday.strftime('%B %d, %Y')}**\n\n"
+    message = "## Daily Spent Time Report for #{yesterday.strftime('%Y-%m-%d')}\n\n"
     message += "| User | Hours | Target Hit | Tasks |\n"
     message += "|---|---|---|---|\n"
     
@@ -42,8 +42,7 @@ namespace :mattermost do
     message += "\n*Target: #{target_hours} hours per day*"
     
     mattermost = Mattermost::Base.new
-    # mattermost.post_message(:general, message)
-    mattermost.post_message(:rytis, message)
+    mattermost.post_message(:general, message)
     
     puts "Daily spent time report sent to #general channel"
   end
