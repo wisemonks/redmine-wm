@@ -7,7 +7,7 @@ module Mattermost
       'general': 'h3ze8pzw8tbwjyajk99d5feboc', # general channel
       'arturas': '8bobf9fiqbryfrkr6ciz3rm5ww', # Artūras
       'rytis': '4qa8z84metdo5gozjwbjr5geho', # Rytis
-      'rokas': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
+      'rokasabrutis': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
       'raminta': 'store77e87g7zjuxi3ieg31roy', # Raminta
       'monika': 'pabetp7expfrdniyy66a654c1e', # Monika
       'agnetap': 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
