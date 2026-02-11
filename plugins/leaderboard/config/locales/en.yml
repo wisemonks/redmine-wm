@@ -11,3 +11,5 @@ en:
   label_budget: Budget
   label_add_budget: Add Budget
   label_edit_budget: Edit Budget
+  field_private_estimated_hours: Private estimated time
+  label_admin_only: Admin only
