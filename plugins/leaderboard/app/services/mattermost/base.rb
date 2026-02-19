@@ -10,7 +10,7 @@ module Mattermost
       'rokasabrutis': 'dcm5ywcw5jbkmxece4dnngex1r', # Rokas
       'raminta': 'store77e87g7zjuxi3ieg31roy', # Raminta
       'monika': 'pabetp7expfrdniyy66a654c1e', # Monika
-      'agnetap': 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
+      # 'agnetap': 'jxddbgtw6tntfcoah84uiap5ne', # Agneta
       'edvinas': 'mfh6rnigmiy7zrptoeioytfc8c', # Edvinas
       'adomas': 'bh8ojm7jmffomxrm84gbphruah', # Adomas
       'vilimaite': 'hofdhsfd9jnzxfwze9c5i1d11w' # Viktorija

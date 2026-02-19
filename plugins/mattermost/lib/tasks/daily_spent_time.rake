@@ -5,7 +5,7 @@ namespace :mattermost do
     target_hours = 8.0
     report_data = []
 
-    [:rokasabrutis, :raminta, :agnetap, :edvinas, :adomas, :vilimaite].each do |user|
+    [:rokasabrutis, :raminta, :edvinas, :adomas, :vilimaite].each do |user|
       mattermost_user = Mattermost::Base::MATTERMOST_CHANNELS[user]
       next if mattermost_user.nil?
 
@@ -52,7 +52,7 @@ namespace :mattermost do
     target_hours = 8.0
     report_data = []
 
-    [:rokasabrutis, :raminta, :agnetap, :edvinas, :adomas, :vilimaite].each do |user|
+    [:rokasabrutis, :raminta, :edvinas, :adomas, :vilimaite].each do |user|
       mattermost_user = Mattermost::Base::MATTERMOST_CHANNELS[user]
       next if mattermost_user.nil?
 
