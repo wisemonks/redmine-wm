@@ -1,4 +1,5 @@
 require_relative 'lib/issue_patch'
+require_relative 'lib/journal_patch'
 
 Redmine::Plugin.register :leaderboard do
   name 'Leaderboard plugin'
@@ -28,4 +29,5 @@ end
 Proc.new do
   Redmine::Helpers::Calendar.send(:include, CalendarPatch)
   Issue.send(:include, IssuePatch)
+  Journal.send(:include, JournalPatch)
 end.call

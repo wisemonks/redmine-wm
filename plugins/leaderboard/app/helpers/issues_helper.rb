@@ -494,6 +494,8 @@ module IssuesHelper
     strings = []
     values_by_field = {}
     details.each do |detail|
+      next if detail.prop_key == 'private_estimated_hours' && !User.current.admin?
+      
       if detail.property == 'cf'
         field = detail.custom_field
         if field && field.multiple?
@@ -532,6 +534,8 @@ module IssuesHelper
     show_diff = false
     no_details = false
 
+    return nil if detail.prop_key == 'private_estimated_hours' && !User.current.admin?
+
     case detail.property
     when 'attr'
       field = detail.prop_key.to_s.gsub(/\_id$/, "")
@@ -547,6 +551,10 @@ module IssuesHelper
         old_value = find_name_by_reflection(field, detail.old_value)
 
       when 'estimated_hours'
+        value = l_hours_short(detail.value.to_f) unless detail.value.blank?
+        old_value = l_hours_short(detail.old_value.to_f) unless detail.old_value.blank?
+
+      when 'private_estimated_hours'
         value = l_hours_short(detail.value.to_f) unless detail.value.blank?
         old_value = l_hours_short(detail.old_value.to_f) unless detail.old_value.blank?
 
