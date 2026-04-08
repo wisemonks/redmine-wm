@@ -13,6 +13,8 @@ set :puma_phased_restart, true
 set :puma_enable_socket_service, true
 
 set :bundle_config, { deployment: false } 
+set :branch, ENV['BRANCH'] || 'master'
+
 # role-based syntax
 # ==================
 
