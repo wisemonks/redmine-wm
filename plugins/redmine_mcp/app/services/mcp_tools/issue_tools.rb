@@ -23,7 +23,7 @@ module McpTools
           inputSchema: {
             type: 'object',
             properties: {
-              issue_id: { type: 'string', description: 'Issue ID', required: true }
+              issue_id: { type: 'string', description: 'Issue ID' }
             },
             required: ['issue_id']
           }
@@ -34,8 +34,8 @@ module McpTools
           inputSchema: {
             type: 'object',
             properties: {
-              project_id: { type: 'string', description: 'Project ID', required: true },
-              subject: { type: 'string', description: 'Issue subject', required: true },
+              project_id: { type: 'string', description: 'Project ID' },
+              subject: { type: 'string', description: 'Issue subject' },
               description: { type: 'string', description: 'Issue description' },
               tracker_id: { type: 'string', description: 'Tracker ID' },
               status_id: { type: 'string', description: 'Status ID' },
@@ -51,7 +51,7 @@ module McpTools
           inputSchema: {
             type: 'object',
             properties: {
-              issue_id: { type: 'string', description: 'Issue ID', required: true },
+              issue_id: { type: 'string', description: 'Issue ID' },
               subject: { type: 'string', description: 'New subject' },
               description: { type: 'string', description: 'New description' },
               status_id: { type: 'string', description: 'New status ID' },

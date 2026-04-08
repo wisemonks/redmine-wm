@@ -26,7 +26,7 @@ module McpTools
             properties: {
               issue_id: { type: 'string', description: 'Issue ID (required if project_id not provided)' },
               project_id: { type: 'string', description: 'Project ID (required if issue_id not provided)' },
-              hours: { type: 'number', description: 'Hours spent', required: true },
+              hours: { type: 'number', description: 'Hours spent' },
               activity_id: { type: 'string', description: 'Activity ID' },
               comments: { type: 'string', description: 'Description of work done' },
               spent_on: { type: 'string', description: 'Date (YYYY-MM-DD), defaults to today' }

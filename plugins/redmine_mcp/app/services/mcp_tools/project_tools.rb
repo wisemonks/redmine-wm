@@ -2,6 +2,10 @@ module McpTools
   class ProjectTools < BaseTool
     def definitions
       [
+        #  d41b3fa37e24cec720a112b8f281279c3e0de013
+        # curl -X POST http://localhost:3000/mcp -H "Content-Type: application/json" -H "X-Redmine-API-Key: d41b3fa37e24cec720a112b8f281279c3e0de013" -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{}}'
+        # curl -X POST http://localhost:3000/mcp -H "Content-Type: application/json" -H "X-Redmine-API-Key: d41b3fa37e24cec720a112b8f281279c3e0de013" -d '{"jsonrpc":"2.0","id":2,"method":"tools/list","params":{}}'
+
         {
           name: 'list_projects',
           description: 'List all visible projects with pagination',
@@ -19,7 +23,7 @@ module McpTools
           inputSchema: {
             type: 'object',
             properties: {
-              project_id: { type: 'string', description: 'Project ID or identifier', required: true }
+              project_id: { type: 'string', description: 'Project ID or identifier' }
             },
             required: ['project_id']
           }
